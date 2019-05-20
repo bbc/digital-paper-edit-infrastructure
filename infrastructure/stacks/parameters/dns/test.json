@@ -1,0 +1,12 @@
+{
+  "parameters": {
+    "ComponentName": "digital-paper-edit",
+    "Environment": ".test.",
+    "HostedZoneName": "tools.bbc.co.uk.",
+    "Backend": ""
+  },
+  "name_suffix": "dns",
+  "aws_account_id": "511603603783",
+  "region": "eu-west-1",
+  "service_stack": false
+}
