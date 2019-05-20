@@ -2,6 +2,7 @@
     "AWSTemplateFormatVersion": "2010-09-09",
     "Parameters": {
         "Backend": {
+            "Default": "ee74d3541ebec4a3.xhst.bbci.co.uk",
             "Description": "Backend hostname for your component (e.g. '[component-name].[env.]account-identifier.xhst.bbci.co.uk')",
             "Type": "String"
         },
@@ -47,7 +48,20 @@
                         },
                         "ResourceRecords": [
                             {
-                                "Ref": "Backend"
+                                "Fn::Join": [
+                                    "",
+                                    [
+                                        {
+                                            "Ref": "ComponentName"
+                                        },
+                                        {
+                                            "Ref": "Environment"
+                                        },
+                                        {
+                                            "Ref": "Backend"
+                                        }
+                                    ]
+                                ]
                             }
                         ],
                         "TTL": "3600",

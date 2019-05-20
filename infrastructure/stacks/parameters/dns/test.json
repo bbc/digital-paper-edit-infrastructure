@@ -3,7 +3,7 @@
     "ComponentName": "digital-paper-edit",
     "Environment": ".test.",
     "HostedZoneName": "tools.bbc.co.uk.",
-    "Backend": ""
+    "Backend": "ee74d3541ebec4a3.xhst.bbci.co.uk"
   },
   "name_suffix": "dns",
   "aws_account_id": "511603603783",

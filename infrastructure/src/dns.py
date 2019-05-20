@@ -35,6 +35,7 @@ component_cname = t.add_parameter(Parameter(
 
 backend = t.add_parameter(Parameter(
     "Backend",
+    Default="ee74d3541ebec4a3.xhst.bbci.co.uk",
     Type="String",
     Description=("Backend hostname for your component (e.g. '[component-name]."
                  "[env.]account-identifier.xhst.bbci.co.uk')")
@@ -49,7 +50,9 @@ record_set_group = t.add_resource(RecordSetGroup(
         ),
         "Type": "CNAME",
         "TTL": "3600",
-        "ResourceRecords": [Ref(backend)]
+        "ResourceRecords": [
+            Join("", [Ref(component_cname), Ref(environment), Ref(backend)])
+        ]
     }]
 ))
 
