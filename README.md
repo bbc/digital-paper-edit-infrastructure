@@ -120,3 +120,15 @@ _How to carry out tests_
 _How to deploy the code/app into test/staging/production_
 
  -->
+
+ <!-- ## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) guidelines and [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) guidelines. -->
+
+## Licence
+<!-- mention MIT Licence -->
+See [LICENCE](./LICENCE.md)
+
+## Legal Disclaimer
+
+_Despite using React and DraftJs, the BBC is not promoting any Facebook products or other commercial interest._
