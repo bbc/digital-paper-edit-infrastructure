@@ -12,7 +12,7 @@ if (cluster.isMaster) {
 
   cluster.on('exit', (worker) => {
     stats.increment('processes_killed');
-    logger.error(`Worker ${worker.process.pid} died`);
+    console.log(`Worker ${worker.process.pid} died`);
     cluster.fork();
   });
 } else {

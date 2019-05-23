@@ -2,8 +2,6 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const logger = require('./logger');
-
 const port = process.env.PORT || 8080;
 const app = express();
 
@@ -24,17 +22,17 @@ app.use((err, req, res, next) => {
 
   res.status(statusCode).json({
     status: statusCode,
-    message: err.message
+    message: err.message,
   });
 });
 
 const server = app.listen(port, () => {
-  logger.info(`listening on ${config.get('host')}:${port}`);
-  logger.info(`Current NODE_ENV setting: ${process.env.NODE_ENV}`);
+  console.log(`listening on ${port}`);
+  console.log(`Current NODE_ENV setting: ${process.env.NODE_ENV}`);
 });
 
 server.on('error', (err) => {
-  logger.error(err);
+  console.log(err);
 });
 
 require('./routes/index')(app);
