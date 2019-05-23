@@ -1,7 +1,0 @@
-{
-  "logger": {
-    "file": "/var/log/digital-paper-edit-infrastructure/application.log",
-    "error": "/var/log/digital-paper-edit-infrastructure/error.log"
-  },
-  "host": "https://digital-paper-edit-infrastructure.test.tools.bbc.co.uk.test.tools.bbc.co.uk"
-}
