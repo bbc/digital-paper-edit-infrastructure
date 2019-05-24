@@ -16,5 +16,5 @@ if (cluster.isMaster) {
     cluster.fork();
   });
 } else {
-  require('./app');
+  require('./digital-paper-edit/app');
 }
