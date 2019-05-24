@@ -1,3 +1,5 @@
 src/node_modules
 *.log
 infrastructure/venv
+
+.DS_Store
