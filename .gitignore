@@ -1,5 +1,12 @@
-src/node_modules
 *.log
 infrastructure/venv
+.vscode
+
+SOURCES
+RPMS
+SRPMS
+
+
+node_modules
 
 .DS_Store

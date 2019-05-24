@@ -1,0 +1,16 @@
+[Unit]
+Description=digital-paper-edit-api
+After=network.target nss-lookup.target
+
+[Service]
+ExecStart=NODE_ENV=production /usr/bin/npm start
+WorkingDirectory=/usr/lib/dpe-api
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=dpe-api
+User=dpe-api
+Group=dpe-api
+
+[Install]
+WantedBy=multi-user.target

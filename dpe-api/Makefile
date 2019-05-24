@@ -1,32 +1,42 @@
-.PHONY: all clean local release
+.PHONY: all clean npm-install prepare local release
 
 # PLEASE CHANGE THE FOLLOWING
-COMPONENT="digital-paper-edit"
+COMPONENT="dpe-api"
 
 all: local
 
+test:
+	# Install all dependencies for test, including devDependencies
+	npm install --prefix src --no-bin-links
+	# Run the tests in a centos7 mock environment for access to a newer version of node
+	# and to more closely mimic the target environment
+	mock-run --os 7 --install "npm" --copyin src src --shell "npm test --prefix src"
 
-prepare: 
+.PHONY: npm-test
+npm-test:
+	npm install --prefix src
+	npm test --prefix src
+
+.PHONY: test-docker
+test-docker:
+	docker run --rm -v `pwd`:/workspace -w /workspace node:10 make npm-test
+
+clean:
+	rm -rf src/node_modules RPMS SRPMS SOURCES
+
+npm-install:
+	# Avoid installing the devDependencies with --production
+	npm --production --prefix src install --no-bin-links
+
+prepare: npm-install
 	# Bundle the source code into a single .tar.gz file, used in
 	# combination with the .spec file to create the RPM(s)
 	mkdir -p RPMS SRPMS SOURCES
 	tar --exclude=".svn" --exclude="*.sw?" --exclude="*.pyc" -czf SOURCES/src.tar.gz src/
 
-
-clean:
-	rm -rf RPMS SRPMS SOURCES
-
-clean-deps:
-	cd dpe-client && make clean
-	cd dpe-api && make clean
-
 local: clean prepare
 	# Build an RPM locally without any cosmos interactions
 	mock-build --os 7
-
-local-deps:
-	cd dpe-client && make local
-	cd dpe-api && make local
 
 release: clean prepare
 	# Build the package in an fresh CentOS 7 build environment, containing
@@ -40,6 +50,6 @@ release: clean prepare
 	# https://github.com/bbc/cosmos-release/ for more information
 	cosmos-release service $(COMPONENT) RPMS/*.rpm
 
-release-deps: 
-	cd dpe-client && make release
-	cd dpe-api && make release
+deploy_int:
+	cosmos deploy $(COMPONENT) int -f
+	cosmos deploy-progress $(COMPONENT) int

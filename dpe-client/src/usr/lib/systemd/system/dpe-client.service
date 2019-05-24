@@ -4,13 +4,13 @@ After=network.target nss-lookup.target
 
 [Service]
 ExecStart=NODE_ENV=production /usr/bin/npm start
-WorkingDirectory=/usr/lib/digital-paper-edit
+WorkingDirectory=/usr/lib/dpe-client
 Restart=always
 StandardOutput=syslog
 StandardError=syslog
-SyslogIdentifier=digital-paper-edit
-User=digital-paper-edit
-Group=digital-paper-edit
+SyslogIdentifier=dpe-client
+User=dpe-client
+Group=dpe-client
 
 [Install]
 WantedBy=multi-user.target
