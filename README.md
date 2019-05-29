@@ -1,6 +1,6 @@
 # Digital Paper Edit - Infrastructure
 
-This is purely the infrastructural part to tie together the (API)[https://github.com/bbc/digital-paper-edit-api/] and the [client](https://github.com/bbc/digital-paper-edit-client/) of Digital Paper Edit.
+This is purely the infrastructural part to tie together the [API](https://github.com/bbc/digital-paper-edit-api/) and the [client](https://github.com/bbc/digital-paper-edit-client/) of Digital Paper Edit.
 
 [See here for overall project architecture info](https://github.com/bbc/digital-paper-edit-client#project-architecture)
 
