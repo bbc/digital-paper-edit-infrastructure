@@ -21,8 +21,8 @@ This is purely the infrastructural part to tie together the [API](https://github
 
 * `infrastructure` contains AWS specific configurations.
 * `SPEC` contains instructions to build an RPM.
-* `dpe-api` contains [API](https://github.com/bbc/digital-paper-edit-api/) specific code.
-* `dpe-client` contains [Client](https://github.com/bbc/digital-paper-edit-client/) specific code.
+* `dpe-api` contains [API](https://github.com/bbc/digital-paper-edit-api/) specific code. (WIP)
+* `dpe-client` contains [Client](https://github.com/bbc/digital-paper-edit-client/) specific code. (WIP)
 
 The `Makefile` has instructions that will allow you to build your RPMS and release them.
 There are 3 `Makefile`s in this repository:
