@@ -3,7 +3,7 @@
 Name: %{name}
 Summary: digital-paper-edit
 Version: 0.1.1%{?buildnum:.%{buildnum}}
-Release: 1%{?dist}
+Release: 2%{?dist}
 Group: System Environment/Daemons
 License: Internal BBC use only
 Summary: Digital Paper Edit Infrastructure
@@ -12,7 +12,6 @@ BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 BuildArch: x86_64
 
 Requires: nodejs
-Requires: cloud-httpd24-ssl-no-certs
 
 BuildRequires: systemd
 BuildRequires: nodejs
@@ -40,7 +39,7 @@ mkdir -p %{buildroot}/var/log/%{name}
 cp %{_builddir}/src/server.js %{buildroot}/usr/lib/%{name}
 cp %{_builddir}/src/usr/lib/systemd/system/%{name}.service %{buildroot}/usr/lib/systemd/system
 
-cp -R %{_builddir}/src/%{name}/ %{buildroot}/usr/lib/%{name}/
+cp -R %{_builddir}/src/ %{buildroot}/usr/lib/%{name}/
 cp -R %{_builddir}/src/node_modules %{buildroot}/usr/lib/%{name}
 cp -R %{_builddir}/src/bake-scripts %{buildroot}%{_sysconfdir}/bake-scripts/%{name}
 

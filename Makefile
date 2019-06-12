@@ -10,7 +10,7 @@ prepare:
 	# Bundle the source code into a single .tar.gz file, used in
 	# combination with the .spec file to create the RPM(s)
 	mkdir -p RPMS SRPMS SOURCES
-	tar --exclude=".svn" --exclude="*.sw?" --exclude="*.pyc" -czf SOURCES/src.tar.gz src/
+	#tar --exclude=".svn" --exclude="*.sw?" --exclude="*.pyc" -czf SOURCES/src.tar.gz src/
 
 
 clean:
