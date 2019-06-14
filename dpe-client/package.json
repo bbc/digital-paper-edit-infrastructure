@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "lint": "eslint .",
-    "spec": "speculate --release 1"
+    "spec": "speculate --release ${BUILD_NUMBER}"
   },
   "repository": {
     "type": "git",
