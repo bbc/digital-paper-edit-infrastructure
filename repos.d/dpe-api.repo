@@ -1,7 +1,0 @@
-[dpe-api]
-name=dpe-api
-mirrorlist=https://repository.api.bbci.co.uk/dpe-api/revisions/head
-gpgcheck=0
-sslclientcert=/etc/pki/tls/certs/client.crt
-sslclientkey=/etc/pki/tls/private/client.key
-sslverify=1
