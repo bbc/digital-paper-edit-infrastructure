@@ -3,9 +3,11 @@ infrastructure/venv
 .vscode
 
 SOURCES
+SPECS
+*.service
+
 RPMS
 SRPMS
-
 
 node_modules
 

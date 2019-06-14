@@ -37,7 +37,6 @@ app.get('/status', (req, res) => {
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(staticIndex, '/index.html'));
-  // string.replace('/bbc/digital-paper-edit-client/static', './static');
 });
 
 module.exports = app;

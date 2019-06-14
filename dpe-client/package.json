@@ -1,11 +1,12 @@
 {
   "name": "digital-paper-edit-client-infra",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "digital-paper-edit-client-infra",
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "spec": "speculate --release 1"
   },
   "repository": {
     "type": "git",
@@ -24,7 +25,13 @@
   "devDependencies": {
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.17.2"
+    "eslint-plugin-import": "^2.17.2",
+    "speculate": "^2.0.0"
+  },
+  "spec": {
+    "requires": [
+      "cloud-httpd24-ssl-services-devs-staff"
+    ]
   },
   "private": true
 }
