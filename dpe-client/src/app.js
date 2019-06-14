@@ -1,22 +1,18 @@
-const express = require('express');
-const bodyParser = require('body-parser');
 const path = require('path');
+const express = require('express');
+
+const ENV = process.env.NODE_ENV || 'dev';
+const PORT = process.env.PORT || 8080;
 
 const app = express();
 
-app.use(bodyParser.json());
+const staticIndex = path.join(
+  __dirname,
+  '/node_modules/@bbc',
+  '/digital-paper-edit-client',
+);
 
-if (process.env.NODE_ENV === 'live') {
-  const staticIndex = path.join(
-    __dirname,
-    '/node_modules/@bbc',
-    '/digital-paper-edit-client',
-    '/index.html',
-  );
-
-  app.use(express.static(staticIndex));
-
-}
+app.use(express.static(staticIndex));
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
@@ -27,13 +23,21 @@ app.use((err, req, res, next) => {
   });
 });
 
-const server = app.listen(8080, () => {
-  console.log('listening on 8080');
-  console.log(`Current NODE_ENV setting: ${process.env.NODE_ENV}`);
+const server = app.listen(PORT, () => {
+  console.log(`ENV: ${ENV} | listening on port ${PORT}`);
 });
 
 server.on('error', (err) => {
-  console.log(err);
+  console.error(err);
+});
+
+app.get('/status', (req, res) => {
+  res.sendStatus(200);
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(staticIndex, '/index.html'));
+  // string.replace('/bbc/digital-paper-edit-client/static', './static');
 });
 
 module.exports = app;
