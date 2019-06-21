@@ -1,10 +1,12 @@
 # Architecture for Digital Paper Edit
 
 * Status: Accepted <!-- optional -->
-* Deciders: Pietro, Dave, Eimi <!-- Laurien, Mark Langton, James Gruessing -->
-* Date: 2019-05-01
+* Deciders: Pietro, Dave, Eimi, James, Alli <!-- Laurien, Mark Langton, James Gruessing -->
+* Date: 2019-06-21
 
 Technical Story: https://github.com/bbc/digital-paper-edit/issues/1 <!-- optional -->
+Additional Stories:
+- https://github.com/bbc/digital-paper-edit-api/issues/1
 
 ## Context and Problem Statement
 
@@ -72,6 +74,7 @@ Pros:
 * Improved application resiliency
 * Decouple server architecture to code
 * [Idempotent](https://en.wikipedia.org/wiki/Idempotence)
+* Resource allocated when needed
 
 Cons:
 
@@ -84,7 +87,8 @@ Cons:
   * Runtime limitations + Time outs
   * Time outs removed with step-functions? - unverified
 * Could be slower
-
+* May not be beneficial for FFMPEG
+  * Unknowns around FFMPEG binary requirements
 
 **Cold Lambda**
 Articles read:
@@ -156,9 +160,10 @@ only IP address based authentication.
 ## Decision Outcome
 
 ![Option 1 (only EC2)](dpe-transcript-EC2.png)
-![Option 2 (EC2, Lambda and gateway)](dpe-transcript-EC2_.png)
+![Option 2 (EC2, Lambda and gateway)](dpe-transcript-EC2_Lambda.png)
+![Option 3 (EC2, Lambda, SNS, and SQS)](dpe-transcript-fleshed-out.png)
 
-Both options will have the advantages of:
+All options will have the advantages of:
 
 * being maintainable,
 * being transparent
@@ -168,7 +173,7 @@ Both options will have the advantages of:
 have cert-based security and ELBs. We will also have a solid CI process around
 the project, including transparency around deployment issues.
 
-Both options will have the disadvantages of:
+All options will have the disadvantages of:
 
 * Initial learning curve around Cosmos (need to understand RHE7).
 * Extra files for Cosmos will be in an opensource repository, which will require
@@ -190,8 +195,7 @@ test integration locally with Lambdas and Gateways.
 
 #### Disadvantages
 
-* Cloudformation template will remain in the opensource repository. This may be
-  something that isn't a problem, it's just a bit puzzling for the users.
+* Operational concerns that might be unnecessary
 
 ### Option 2
 
@@ -204,3 +208,17 @@ test integration locally with Lambdas and Gateways.
 
 * There could be a timeout issue for Lambda
 * Difficulty in debugging due to Lambda
+* Operating System is abstracted away (loss of control)
+
+### Option 3
+
+#### Advantages
+
+* Resilience from using queues
+* Complete decoupling from STT
+* Fleshed out more, clear responsibilities
+
+#### Disadvantages
+
+* Additional components and technologies
+* Lambda and EC2
