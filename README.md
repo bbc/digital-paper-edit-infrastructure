@@ -8,10 +8,9 @@ This is purely the infrastructural part to tie together the [API](https://github
 
 | Environment     | URL  |
 | :------------- | :----------|
-|  Mock | TBC  | 
-|  Int | TBC  | 
-| Test   | TBC| 
-| Live   | TBC | 
+| Int | https://digital-paper-edit.int.tools.bbc.co.uk | 
+| Test   | https://digital-paper-edit.test.tools.bbc.co.uk | 
+| Live   | https://digital-paper-edit.live.tools.bbc.co.uk | 
 
 [See @bbc/digital-paper-edit-client/docs/ADR/2019-04-23-transcript-architecture.md ](https://github.com/bbc/digital-paper-edit-client/blob/master/docs/ADR/2019-04-23-transcript-architecture.md) for more info on the architecure and diagram.
 
