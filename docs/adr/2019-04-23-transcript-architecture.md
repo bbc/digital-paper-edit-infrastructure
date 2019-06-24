@@ -206,11 +206,19 @@ test integration locally with Lambdas and Gateways.
 
 #### Disadvantages
 
-* There could be a timeout issue for Lambda
+* There could be a time-out issue for Lambda
 * Difficulty in debugging due to Lambda
 * Operating System is abstracted away (loss of control)
 
 ### Option 3
+
+This has been developed two months after. The architecture is fleshed out in this option.
+We've added:
+
+1. SNS and SQS (fanout pattern) for reliable job delivery to microservices.
+2. S3 signed URL communication via API, rather than direct upload from API. This will improve data transmission from different components.
+3. PSTT Queue jobs to be published by Audio FFMPEG Service, subscribed PSTT client, and pushed to PSTT.
+4. On completion of PSTT task, a notification will be pushed to the PSTT Queue, which the client will consume to update the API.
 
 #### Advantages
 
@@ -222,3 +230,4 @@ test integration locally with Lambdas and Gateways.
 
 * Additional components and technologies
 * Lambda and EC2
+* Polling - although cost is negligible with optimisation.
