@@ -213,6 +213,7 @@ test integration locally with Lambdas and Gateways.
 ### Option 3
 
 This has been developed two months after. The architecture is fleshed out in this option.
+It shows, clearer responsibilities with defined interfaces.
 We've added:
 
 1. SNS and SQS (fanout pattern) for reliable job delivery to microservices.
@@ -220,14 +221,17 @@ We've added:
 3. PSTT Queue jobs to be published by Audio FFMPEG Service, subscribed PSTT client, and pushed to PSTT.
 4. On completion of PSTT task, a notification will be pushed to the PSTT Queue, which the client will consume to update the API.
 
+The video preview section is tinted with yellow as it is not currently in-scope.
+
 #### Advantages
 
-* Resilience from using queues
-* Complete decoupling from STT
-* Fleshed out more, clear responsibilities
+* Fault tolerance from using queues
+* Avoiding timeout issues with Lambdas for running long jobs
+* A uniform interface across the media processing microservices (polling queues)
+* Upload is not via the API, which supposedly improves data transmission time.
+... and benefits from the previous options.
 
 #### Disadvantages
 
 * Additional components and technologies
-* Lambda and EC2
 * Polling - although cost is negligible with optimisation.
