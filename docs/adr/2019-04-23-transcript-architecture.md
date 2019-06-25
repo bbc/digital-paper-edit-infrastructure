@@ -210,7 +210,7 @@ test integration locally with Lambdas and Gateways.
 * Difficulty in debugging due to Lambda
 * Operating System is abstracted away (loss of control)
 
-### Option 3
+### Option 3 (EC2, Lambda, SNS, and SQS)
 
 This has been developed two months after. The architecture is fleshed out in this option.
 It shows, clearer responsibilities with defined interfaces.
