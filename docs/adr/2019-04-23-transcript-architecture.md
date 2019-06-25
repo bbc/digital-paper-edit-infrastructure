@@ -92,9 +92,10 @@ Cons:
 
 **Cold Lambda**
 Articles read:
-* https://read.acloud.guru/does-coding-language-memory-or-package-size-affect-cold-starts-of-aws-lambda-a15e26d12c76
-* https://kevinslin.com/aws/lambda_cold_start_idle/#results-us-east-1
-* https://read.acloud.guru/how-long-does-aws-lambda-keep-your-idle-functions-around-before-a-cold-start-bf715d3b810
+
+* <https://read.acloud.guru/does-coding-language-memory-or-package-size-affect-cold-starts-of-aws-lambda-a15e26d12c76>
+* <https://kevinslin.com/aws/lambda_cold_start_idle/#results-us-east-1>
+* <https://read.acloud.guru/how-long-does-aws-lambda-keep-your-idle-functions-around-before-a-cold-start-bf715d3b810>
 
 tl;dr the three articles above:
 Lambda idleness causes
@@ -114,6 +115,24 @@ set in stone.
 In order to avoid the cold restarts, we would need to create "Step Functions" to
 retain Lambdas "warm". The Step Functions will periodically call Lambdas (every
 30 minutes or so) to reduce idle time.
+
+##### Message delivery and Queues
+
+Using both SNS and SQS are well known patterns. SNS fans out messages to services subscribed to the topic. Services such as HTTPS, Queues, and Lambdas can subscribe to the topic. This is typically called the Pub/Sub model.
+SNS and SQS are often combined to fanout a single message to many different services in real-time. SQS is considered for our architecture for retry logic. SQS is a best effort FIFO queue which works for us. SQS's cost is based on the number of polling calls are done on the queue. The first million is free, and it's $0.40 for every subsequent million calls.
+
+The consumer of the queue can be either EC2 or Lambda.
+
+Lambda is beneficial in this case if we wanted asynchronous behaviour when there are jobs in the queue. However, since the microservices all have a uniform approach (subscribe to queue, update DB via API), it will be nicer to retain a uniform approach. Other than saving the cost of polling, there are no clear benefits of using a Lambda.
+
+Articles read:
+
+* <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-best-practices.html>
+* <https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html>
+* <https://aws.amazon.com/sns/faqs/#reliability>
+* <https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html>
+* <https://medium.com/@TomKeeber/top-sns-aws-design-patterns-19b6acc82017>
+* <https://d20tech.com/2018/fanout-with-sns-sqs-lambda/>
 
 #### Storage: local vs S3
 
@@ -159,9 +178,9 @@ only IP address based authentication.
 
 ## Decision Outcome
 
-![Option 1 (only EC2)](dpe-transcript-EC2.png)
-![Option 2 (EC2, Lambda and gateway)](dpe-transcript-EC2_Lambda.png)
-![Option 3 (EC2, Lambda, SNS, and SQS)](dpe-transcript-fleshed-out.png)
+![Option 1 (only EC2)](./dpe-transcript-EC2.png)
+![Option 2 (EC2, Lambda and gateway)](./dpe-transcript-EC2_Lambda.png)
+![Option 3 (EC2, Lambda, SNS, and SQS)](./dpe-transcript-fleshed-out.png)
 
 All options will have the advantages of:
 
@@ -184,7 +203,7 @@ All options will have the disadvantages of:
   S3.
 * Locking in with AWS.
 
-### Option 1
+### Option 1 (only EC2)
 
 #### Advantages
 
@@ -197,7 +216,7 @@ test integration locally with Lambdas and Gateways.
 
 * Operational concerns that might be unnecessary
 
-### Option 2
+### Option 2 (EC2, Lambda and gateway)
 
 #### Advantages
 
@@ -210,7 +229,7 @@ test integration locally with Lambdas and Gateways.
 * Difficulty in debugging due to Lambda
 * Operating System is abstracted away (loss of control)
 
-### Option 3
+### Option 3 (EC2, Lambda, SNS, and SQS)
 
 This has been developed two months after. The architecture is fleshed out in this option.
 It shows, clearer responsibilities with defined interfaces.
@@ -218,8 +237,8 @@ We've added:
 
 1. SNS and SQS (fanout pattern) for reliable job delivery to microservices.
 2. S3 signed URL communication via API, rather than direct upload from API. This will improve data transmission from different components.
-3. PSTT Queue jobs to be published by Audio FFMPEG Service, subscribed PSTT client, and pushed to PSTT.
-4. On completion of PSTT task, a notification will be pushed to the PSTT Queue, which the client will consume to update the API.
+3. STT Queue jobs to be published by Audio FFMPEG Service, subscribed STT client (proxy), and pushed to STT service, treated as a black box.
+4. On completion of STT task, the client will update the API directly.
 
 The video preview section is tinted with yellow as it is not currently in-scope.
 
@@ -227,7 +246,7 @@ The video preview section is tinted with yellow as it is not currently in-scope.
 
 * Fault tolerance from using queues
 * Avoiding timeout issues with Lambdas for running long jobs
-* A uniform interface across the media processing microservices (polling queues)
+* A uniform interface across the media processing microservices (polling queues, posting to the API)
 * Upload is not via the API, which supposedly improves data transmission time.
 ... and benefits from the previous options.
 
