@@ -1,10 +1,12 @@
 # Architecture for Digital Paper Edit
 
 * Status: Accepted <!-- optional -->
-* Deciders: Pietro, Dave, Eimi <!-- Laurien, Mark Langton, James Gruessing -->
-* Date: 2019-05-01
+* Deciders: Pietro, Dave, Eimi, James, Alli <!-- Laurien, Mark Langton, James Gruessing -->
+* Date: 2019-06-21
 
 Technical Story: https://github.com/bbc/digital-paper-edit/issues/1 <!-- optional -->
+Additional Stories:
+- https://github.com/bbc/digital-paper-edit-api/issues/1
 
 ## Context and Problem Statement
 
@@ -72,6 +74,7 @@ Pros:
 * Improved application resiliency
 * Decouple server architecture to code
 * [Idempotent](https://en.wikipedia.org/wiki/Idempotence)
+* Resource allocated when needed
 
 Cons:
 
@@ -84,13 +87,15 @@ Cons:
   * Runtime limitations + Time outs
   * Time outs removed with step-functions? - unverified
 * Could be slower
-
+* May not be beneficial for FFMPEG
+  * Unknowns around FFMPEG binary requirements
 
 **Cold Lambda**
 Articles read:
-* https://read.acloud.guru/does-coding-language-memory-or-package-size-affect-cold-starts-of-aws-lambda-a15e26d12c76
-* https://kevinslin.com/aws/lambda_cold_start_idle/#results-us-east-1
-* https://read.acloud.guru/how-long-does-aws-lambda-keep-your-idle-functions-around-before-a-cold-start-bf715d3b810
+
+* <https://read.acloud.guru/does-coding-language-memory-or-package-size-affect-cold-starts-of-aws-lambda-a15e26d12c76>
+* <https://kevinslin.com/aws/lambda_cold_start_idle/#results-us-east-1>
+* <https://read.acloud.guru/how-long-does-aws-lambda-keep-your-idle-functions-around-before-a-cold-start-bf715d3b810>
 
 tl;dr the three articles above:
 Lambda idleness causes
@@ -110,6 +115,24 @@ set in stone.
 In order to avoid the cold restarts, we would need to create "Step Functions" to
 retain Lambdas "warm". The Step Functions will periodically call Lambdas (every
 30 minutes or so) to reduce idle time.
+
+##### Message delivery and Queues
+
+Using both SNS and SQS are well known patterns. SNS fans out messages to services subscribed to the topic. Services such as HTTPS, Queues, and Lambdas can subscribe to the topic. This is typically called the Pub/Sub model.
+SNS and SQS are often combined to fanout a single message to many different services in real-time. SQS is considered for our architecture for retry logic. SQS is a best effort FIFO queue which works for us. SQS's cost is based on the number of polling calls are done on the queue. The first million is free, and it's $0.40 for every subsequent million calls.
+
+The consumer of the queue can be either EC2 or Lambda.
+
+Lambda is beneficial in this case if we wanted asynchronous behaviour when there are jobs in the queue. However, since the microservices all have a uniform approach (subscribe to queue, update DB via API), it will be nicer to retain a uniform approach. Other than saving the cost of polling, there are no clear benefits of using a Lambda.
+
+Articles read:
+
+* <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-best-practices.html>
+* <https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html>
+* <https://aws.amazon.com/sns/faqs/#reliability>
+* <https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html>
+* <https://medium.com/@TomKeeber/top-sns-aws-design-patterns-19b6acc82017>
+* <https://d20tech.com/2018/fanout-with-sns-sqs-lambda/>
 
 #### Storage: local vs S3
 
@@ -155,10 +178,18 @@ only IP address based authentication.
 
 ## Decision Outcome
 
-![Option 1 (only EC2)](dpe-transcript-EC2.png)
-![Option 2 (EC2, Lambda and gateway)](dpe-transcript-EC2_.png)
+We are going for **Option 3**.
 
-Both options will have the advantages of:
+Option 1 (only EC2)
+![Option 1 (only EC2)](./dpe-transcript-EC2.png)
+
+Option 2 (EC2, Lambda and gateway)
+![Option 2 (EC2, Lambda and gateway)](./dpe-transcript-EC2_Lambda.png)
+
+Option 3 (EC2, Lambda, SNS, and SQS)
+![Option 3 (EC2, Lambda, SNS, and SQS)](./dpe-transcript-fleshed-out.png)
+
+All options will have the advantages of:
 
 * being maintainable,
 * being transparent
@@ -168,18 +199,18 @@ Both options will have the advantages of:
 have cert-based security and ELBs. We will also have a solid CI process around
 the project, including transparency around deployment issues.
 
-Both options will have the disadvantages of:
+All options will have the disadvantages of:
 
 * Initial learning curve around Cosmos (need to understand RHE7).
 * Extra files for Cosmos will be in an opensource repository, which will require
   additional documentation and security checking.
 * Cost of AWS - not entirely sure how much it will be right now, but it will be
-  a minimum of 4 instances running in ``t2.small` for Option 1, and 2
+  a minimum of 4 instances running in `t2.small` for Option 1, and 2
   `t2.small` instances for Option 2, plus lambda executions as well as SQS and
   S3.
 * Locking in with AWS.
 
-### Option 1
+### Option 1 (only EC2)
 
 #### Advantages
 
@@ -190,10 +221,9 @@ test integration locally with Lambdas and Gateways.
 
 #### Disadvantages
 
-* Cloudformation template will remain in the opensource repository. This may be
-  something that isn't a problem, it's just a bit puzzling for the users.
+* Operational concerns that might be unnecessary
 
-### Option 2
+### Option 2 (EC2, Lambda and gateway)
 
 #### Advantages
 
@@ -202,5 +232,33 @@ test integration locally with Lambdas and Gateways.
 
 #### Disadvantages
 
-* There could be a timeout issue for Lambda
+* There could be a time-out issue for Lambda
 * Difficulty in debugging due to Lambda
+* Operating System is abstracted away (loss of control)
+
+### Option 3 (EC2, Lambda, SNS, and SQS)
+
+This has been developed two months after. The architecture is fleshed out in this option.
+It shows, clearer responsibilities with defined interfaces.
+We've added:
+
+1. SNS and SQS (fanout pattern) for reliable job delivery to microservices.
+2. Each microservice to have a queue for asymmetrical queue growth.
+3. S3 signed URL communication via API, rather than direct upload from API. This will improve data transmission from different components.
+4. STT Queue jobs to be published by Audio FFMPEG Service, subscribed STT client (proxy), and pushed to STT service, treated as a black box.
+5. On completion of STT task, the client will update the API directly.
+
+The video preview section is tinted with yellow as it is not currently in-scope.
+
+#### Advantages
+
+* Fault tolerance from using queues
+* Avoiding timeout issues with Lambdas for running long jobs
+* A uniform interface across the media processing microservices (polling queues, posting to the API)
+* Upload is not via the API, which supposedly improves data transmission time.
+... and benefits from the previous options.
+
+#### Disadvantages
+
+* Additional components and technologies
+* Polling - although cost is negligible with optimisation.
