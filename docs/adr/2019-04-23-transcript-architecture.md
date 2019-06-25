@@ -197,7 +197,7 @@ test integration locally with Lambdas and Gateways.
 
 * Operational concerns that might be unnecessary
 
-### Option 2
+### Option 2 (EC2, Lambda and gateway)
 
 #### Advantages
 
