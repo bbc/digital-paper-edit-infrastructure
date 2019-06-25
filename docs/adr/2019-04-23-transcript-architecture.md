@@ -203,7 +203,7 @@ All options will have the disadvantages of:
 * Extra files for Cosmos will be in an opensource repository, which will require
   additional documentation and security checking.
 * Cost of AWS - not entirely sure how much it will be right now, but it will be
-  a minimum of 4 instances running in ``t2.small` for Option 1, and 2
+  a minimum of 4 instances running in `t2.small` for Option 1, and 2
   `t2.small` instances for Option 2, plus lambda executions as well as SQS and
   S3.
 * Locking in with AWS.
@@ -241,9 +241,10 @@ It shows, clearer responsibilities with defined interfaces.
 We've added:
 
 1. SNS and SQS (fanout pattern) for reliable job delivery to microservices.
-2. S3 signed URL communication via API, rather than direct upload from API. This will improve data transmission from different components.
-3. STT Queue jobs to be published by Audio FFMPEG Service, subscribed STT client (proxy), and pushed to STT service, treated as a black box.
-4. On completion of STT task, the client will update the API directly.
+2. Each microservice to have a queue for asymmetrical queue growth.
+3. S3 signed URL communication via API, rather than direct upload from API. This will improve data transmission from different components.
+4. STT Queue jobs to be published by Audio FFMPEG Service, subscribed STT client (proxy), and pushed to STT service, treated as a black box.
+5. On completion of STT task, the client will update the API directly.
 
 The video preview section is tinted with yellow as it is not currently in-scope.
 
