@@ -178,8 +178,13 @@ only IP address based authentication.
 
 ## Decision Outcome
 
+Option 1 (only EC2)
 ![Option 1 (only EC2)](./dpe-transcript-EC2.png)
+
+Option 2 (EC2, Lambda and gateway)
 ![Option 2 (EC2, Lambda and gateway)](./dpe-transcript-EC2_Lambda.png)
+
+Option 3 (EC2, Lambda, SNS, and SQS)
 ![Option 3 (EC2, Lambda, SNS, and SQS)](./dpe-transcript-fleshed-out.png)
 
 All options will have the advantages of:
