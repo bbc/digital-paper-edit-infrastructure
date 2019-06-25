@@ -178,6 +178,8 @@ only IP address based authentication.
 
 ## Decision Outcome
 
+We are going for **Option 3**.
+
 Option 1 (only EC2)
 ![Option 1 (only EC2)](./dpe-transcript-EC2.png)
 
