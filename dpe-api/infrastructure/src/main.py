@@ -58,7 +58,7 @@ t.resources[IAM.COMPONENT_POLICY].PolicyDocument.Statement.extend([
             Action('s3', 'ListBucket'),
             Action('s3', '*Object')
         ],
-        Resource=[GetAtt(Ref(S3Bucket), "Arn")],
+        Resource=[GetAtt(S3Bucket, "Arn")],
         Effect=Allow
     )])
 

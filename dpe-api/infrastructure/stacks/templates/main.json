@@ -383,9 +383,7 @@
                             "Resource": [
                                 {
                                     "Fn::GetAtt": [
-                                        {
-                                            "Ref": "S3Bucket"
-                                        },
+                                        "S3Bucket",
                                         "Arn"
                                     ]
                                 }
