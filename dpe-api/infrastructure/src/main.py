@@ -1,6 +1,6 @@
 from cosmosTroposphere import CosmosTemplate
 from cosmosTroposphere.component.iam import IAM
-from troposphere import Parameter, Template, Join, Ref
+from troposphere import Parameter, Template, Join, Ref, GetAtt
 from troposphere.sns import Topic
 from troposphere.s3 import Bucket, LifecycleConfiguration, LifecycleRule
 from awacs.aws import Action, Allow, Statement
@@ -58,7 +58,7 @@ t.resources[IAM.COMPONENT_POLICY].PolicyDocument.Statement.extend([
             Action('s3', 'ListBucket'),
             Action('s3', '*Object')
         ],
-        Resource=[Ref(S3Bucket)],
+        Resource=[GetAtt(Ref(S3Bucket), "Arn")],
         Effect=Allow
     )])
 

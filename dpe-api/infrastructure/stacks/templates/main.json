@@ -382,7 +382,12 @@
                             "Effect": "Allow",
                             "Resource": [
                                 {
-                                    "Ref": "S3Bucket"
+                                    "Fn::GetAtt": [
+                                        {
+                                            "Ref": "S3Bucket"
+                                        },
+                                        "Arn"
+                                    ]
                                 }
                             ]
                         }
