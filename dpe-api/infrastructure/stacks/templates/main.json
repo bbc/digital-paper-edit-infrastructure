@@ -362,6 +362,29 @@
                             "Resource": [
                                 "*"
                             ]
+                        },
+                        {
+                            "Action": [
+                                "sns:Publish"
+                            ],
+                            "Effect": "Allow",
+                            "Resource": [
+                                {
+                                    "Ref": "SNSTopic"
+                                }
+                            ]
+                        },
+                        {
+                            "Action": [
+                                "s3:ListBucket",
+                                "s3:s3:*Object"
+                            ],
+                            "Effect": "Allow",
+                            "Resource": [
+                                {
+                                    "Ref": "S3Bucket"
+                                }
+                            ]
                         }
                     ]
                 },
@@ -442,6 +465,40 @@
                 }
             },
             "Type": "AWS::EC2::SecurityGroup"
+        },
+        "S3Bucket": {
+            "Properties": {
+                "BucketName": {
+                    "Fn::Join": [
+                        "-",
+                        [
+                            {
+                                "Ref": "Environment"
+                            },
+                            "digital-paper-edit-api",
+                            "media"
+                        ]
+                    ]
+                }
+            },
+            "Type": "AWS::S3::Bucket"
+        },
+        "SNSTopic": {
+            "Properties": {
+                "TopicName": {
+                    "Fn::Join": [
+                        "-",
+                        [
+                            {
+                                "Ref": "Environment"
+                            },
+                            "digital-paper-edit-api",
+                            "sns"
+                        ]
+                    ]
+                }
+            },
+            "Type": "AWS::SNS::Topic"
         }
     }
 }
