@@ -8,6 +8,7 @@ This is purely the infrastructural part to tie together the [API](https://github
 
 | Environment     | URL  |
 | :------------- | :----------|
+| Mock | Local dev - TBC |
 | Int | https://digital-paper-edit.int.tools.bbc.co.uk | 
 | Test   | https://digital-paper-edit.test.tools.bbc.co.uk | 
 | Live   | https://digital-paper-edit.live.tools.bbc.co.uk | 
