@@ -1,10 +1,5 @@
-# originally from https://github.com/cloudtools/troposphere/blob/master/examples/IAM_Policies_SNS_Publish_To_SQS.py
-
-# Converted from IAM_Policies_SNS_Publish_To_SQS.template located at:
-# http://aws.amazon.com/cloudformation/aws-cloudformation-templates/
-
-from troposphere import GetAtt, Output, Ref, Template, Join
-from troposphere.sns import Subscription, Topic
+import sys
+from troposphere import GetAtt, Ref, Template, Join, Parameter
 from troposphere.sqs import Queue, QueuePolicy
 
 t = Template()
@@ -15,40 +10,38 @@ t.set_description("AWS CloudFormation Sample Template: This template "
 component = t.add_parameter(Parameter(
     "ComponentName",
     Type="String",
-    Description=("Environment name to check against int, test, or live")
+    Description=("Component name")
 ))
 
-
-SttGatewayIspyTopic = t.add_parameter(Parameter(
+sttGatewayIspyTopic = t.add_parameter(Parameter(
     "SttGatewayIspyTopic",
     Type="String",
-    Description=("SttGatewayIspyTopic - description tbc")
+    Description=("SttGatewayIspyTopic")
 ))
 
-SttBridgeAwsIspyTopic = t.add_parameter(Parameter(
+sttBridgeAwsIspyTopic = t.add_parameter(Parameter(
     "SttBridgeAwsIspyTopic",
     Type="String",
-    Description=("SttBridgeAwsIspyTopic - description tbc")
+    Description=("SttBridgeAwsIspyTopic")
 ))
 
-SttIspyConformerIspyTopic = t.add_parameter(Parameter(
+sttIspyConformerIspyTopic = t.add_parameter(Parameter(
     "SttIspyConformerIspyTopic",
     Type="String",
-    Description=("SttIspyConformerIspyTopic - description tbc")
+    Description=("SttIspyConformerIspyTopic")
 ))
 
-SttNormaliserAwsIspyTopic = t.add_parameter(Parameter(
+sttNormaliserAwsIspyTopic = t.add_parameter(Parameter(
     "SttNormaliserAwsIspyTopic",
     Type="String",
-    Description=("SttNormaliserAwsIspyTopic - description tbc")
+    Description=("SttNormaliserAwsIspyTopic")
 ))
 
-SttOutputNotification = t.add_parameter(Parameter(
+sttOutputNotification = t.add_parameter(Parameter(
     "SttOutputNotification",
     Type="String",
-    Description=("SttOutputNotification - description tbc")
+    Description=("SttOutputNotification")
 ))
-
 
 environment = t.add_parameter(Parameter(
     "Environment",
@@ -60,8 +53,8 @@ environment = t.add_parameter(Parameter(
 
 sqsqueue = t.add_resource(Queue(
     "SQSQueue",
-    QueueName=Join("-",[Ref(environment), Ref(component), 'queue'])
-)) 
+    QueueName=Join("-", [Ref(environment), Ref(component), 'queue'])
+))
 
 t.add_resource(QueuePolicy(
     "AllowSNS2SQSPolicy",
@@ -82,18 +75,22 @@ t.add_resource(QueuePolicy(
                 ],
             "Resource": GetAtt(sqsqueue, "Arn"),
             'Condition': {
-            'ForAnyValue:ArnEquals': {
-            'aws:SourceArn': [
-              process.env.SttGatewayIspyTopic,
-              process.env.SttBridgeAwsIspyTopic,
-              process.env.SttNormaliserAwsIspyTopic,
-              process.env.SttOutputNotification,
-              process.env.SttIspyConformerIspyTopic
-            ]
-          }
-        }
+                'ForAnyValue:ArnEquals': {
+                    'aws:SourceArn': [
+                        Ref(sttBridgeAwsIspyTopic),
+                        Ref(sttGatewayIspyTopic),
+                        Ref(sttIspyConformerIspyTopic),
+                        Ref(sttNormaliserAwsIspyTopic),
+                        Ref(sttOutputNotification)
+                    ]
+                }
+            }
         }]
     }
 ))
 
-print(t.to_json())
+template = t.to_json()
+if len(sys.argv) > 1:
+    open(sys.argv[1], "w").write(template + "\n")
+else:
+    print(template)

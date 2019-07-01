@@ -3,7 +3,6 @@ import sys
 from troposphere import Parameter, Ref, Template, Join
 from troposphere.route53 import RecordSetGroup
 
-
 t = Template()
 
 t.set_version("2010-09-09")

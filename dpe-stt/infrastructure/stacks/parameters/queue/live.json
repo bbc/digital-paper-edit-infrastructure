@@ -1,0 +1,15 @@
+{
+    "parameters": {
+      "ComponentName": "digital-paper-edit-stt",
+      "Environment": "live",
+      "SttGatewayIspyTopic": "",
+      "SttBridgeAwsIspyTopic": "",
+      "SttIspyConformerIspyTopic": "",
+      "SttNormaliserAwsIspyTopic": "",
+      "SttOutputNotification": ""
+    },
+    "name_suffix": "queue",
+    "aws_account_id": "060170161162",
+    "region": "eu-west-1",
+    "service_stack": false
+  }

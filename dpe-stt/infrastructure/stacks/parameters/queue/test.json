@@ -1,7 +1,7 @@
 {
     "parameters": {
       "ComponentName": "digital-paper-edit-stt",
-      "Environment": "int",
+      "Environment": "test",
       "SttGatewayIspyTopic": "arn:aws:sns:eu-west-1:038610054328:TestModavSttGatewayResources-IspyTopic-17432X1FNW4H4",
       "SttBridgeAwsIspyTopic": "arn:aws:sns:eu-west-1:038610054328:TestModavSttBridgeAwsResources-IspyTopic-1RPQ4C97PHFW6",
       "SttIspyConformerIspyTopic": "arn:aws:sns:eu-west-1:038610054328:TestModavSttIspyConformerResources-IspyTopic-NPIG38C0G9NL",
