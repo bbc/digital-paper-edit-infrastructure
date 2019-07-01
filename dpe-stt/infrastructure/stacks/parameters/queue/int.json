@@ -1,0 +1,10 @@
+{
+    "parameters": {
+      "ComponentName": "digital-paper-edit-stt",
+      "Environment": "int"
+    },
+    "name_suffix": "queue",
+    "aws_account_id": "511603603783",
+    "region": "eu-west-1",
+    "service_stack": false
+  }
