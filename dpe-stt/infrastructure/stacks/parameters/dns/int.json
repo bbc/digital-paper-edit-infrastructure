@@ -1,6 +1,6 @@
 {
     "parameters": {
-      "ComponentName": "digital-paper-edit",
+      "ComponentName": "digital-paper-edit-stt",
       "Environment": ".int.",
       "HostedZoneName": "tools.bbc.co.uk.",
       "Backend": "ee74d3541ebec4a3.xhst.bbci.co.uk"
