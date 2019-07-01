@@ -1,8 +1,6 @@
 from cosmosTroposphere import CosmosTemplate
 from cosmosTroposphere.component.iam import IAM
 from troposphere import Parameter, Template, Join, Ref, GetAtt
-from troposphere.sns import Topic
-from troposphere.s3 import Bucket, LifecycleConfiguration, LifecycleRule
 from awacs.aws import Action, Allow, Statement
 
 component_name = "digital-paper-edit-api"
