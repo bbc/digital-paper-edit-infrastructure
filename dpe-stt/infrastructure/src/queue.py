@@ -17,6 +17,39 @@ component = t.add_parameter(Parameter(
     Type="String",
     Description=("Environment name to check against int, test, or live")
 ))
+
+
+SttGatewayIspyTopic = t.add_parameter(Parameter(
+    "SttGatewayIspyTopic",
+    Type="String",
+    Description=("SttGatewayIspyTopic - description tbc")
+))
+
+SttBridgeAwsIspyTopic = t.add_parameter(Parameter(
+    "SttBridgeAwsIspyTopic",
+    Type="String",
+    Description=("SttBridgeAwsIspyTopic - description tbc")
+))
+
+SttIspyConformerIspyTopic = t.add_parameter(Parameter(
+    "SttIspyConformerIspyTopic",
+    Type="String",
+    Description=("SttIspyConformerIspyTopic - description tbc")
+))
+
+SttNormaliserAwsIspyTopic = t.add_parameter(Parameter(
+    "SttNormaliserAwsIspyTopic",
+    Type="String",
+    Description=("SttNormaliserAwsIspyTopic - description tbc")
+))
+
+SttOutputNotification = t.add_parameter(Parameter(
+    "SttOutputNotification",
+    Type="String",
+    Description=("SttOutputNotification - description tbc")
+))
+
+
 environment = t.add_parameter(Parameter(
     "Environment",
     Default=".",
@@ -27,23 +60,8 @@ environment = t.add_parameter(Parameter(
 
 sqsqueue = t.add_resource(Queue(
     "SQSQueue",
-    QueueName=Join("-",[Ref(environment), 'digital-paper-edit')) 
-
-
-
-snstopic = t.add_resource(Topic(
-    "SNSTopic",
-    Subscription=[Subscription(
-        Protocol="sqs",
-        Endpoint=GetAtt(sqsqueue, "Arn")
-    )]
-))
-
-t.add_output(Output(
-    "QueueArn",
-    Value=GetAtt(sqsqueue, "Arn"),
-    Description="ARN of SQS Queue",
-))
+    QueueName=Join("-",[Ref(environment), Ref(component), 'queue'])
+)) 
 
 t.add_resource(QueuePolicy(
     "AllowSNS2SQSPolicy",
@@ -52,16 +70,28 @@ t.add_resource(QueuePolicy(
         "Version": "2008-10-17",
         "Id": "PublicationPolicy",
         "Statement": [{
-            "Sid": "Allow-SNS-SendMessage",
+            "Sid": "PSTT-statement",
             "Effect": "Allow",
             "Principal": {
               "AWS": "*"
             },
-            "Action": ["sqs:SendMessage"],
+            "Action": [
+                'sqs:GetQueueUrl',
+                'sqs:SendMessage',
+                'sqs:GetQueueAttributes'
+                ],
             "Resource": GetAtt(sqsqueue, "Arn"),
-            "Condition": {
-                "ArnEquals": {"aws:SourceArn": Ref(snstopic)}
-            }
+            'Condition': {
+            'ForAnyValue:ArnEquals': {
+            'aws:SourceArn': [
+              process.env.SttGatewayIspyTopic,
+              process.env.SttBridgeAwsIspyTopic,
+              process.env.SttNormaliserAwsIspyTopic,
+              process.env.SttOutputNotification,
+              process.env.SttIspyConformerIspyTopic
+            ]
+          }
+        }
         }]
     }
 ))
