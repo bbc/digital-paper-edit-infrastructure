@@ -1,0 +1,82 @@
+{
+    "Description": "AWS CloudFormation Sample Template: This template demonstrates the creation of a DynamoDB table.",
+    "Parameters": {
+        "ComponentName": {
+            "Description": "component name",
+            "Type": "String"
+        },
+        "DpeTopic": {
+            "Default": "",
+            "Description": "SNS topic from the DPE API",
+            "Type": "String"
+        },
+        "Environment": {
+            "Description": "Environment name to check against int, test, or live",
+            "Type": "String"
+        }
+    },
+    "Resources": {
+        "AllowSNS2SQSPolicy": {
+            "Properties": {
+                "PolicyDocument": {
+                    "Id": "PublicationPolicy",
+                    "Statement": [
+                        {
+                            "Action": [
+                                "sqs:GetQueueUrl",
+                                "sqs:SendMessage",
+                                "sqs:GetQueueAttributes"
+                            ],
+                            "Condition": {
+                                "ForAnyValue:ArnEquals": {
+                                    "aws:SourceArn": [
+                                        {
+                                            "Ref": "DpeTopic"
+                                        }
+                                    ]
+                                }
+                            },
+                            "Effect": "Allow",
+                            "Principal": {
+                                "AWS": "*"
+                            },
+                            "Resource": {
+                                "Fn::GetAtt": [
+                                    "SQSQueue",
+                                    "Arn"
+                                ]
+                            },
+                            "Sid": "audio-converter-statement"
+                        }
+                    ],
+                    "Version": "2008-10-17"
+                },
+                "Queues": [
+                    {
+                        "Ref": "SQSQueue"
+                    }
+                ]
+            },
+            "Type": "AWS::SQS::QueuePolicy"
+        },
+        "SQSQueue": {
+            "Properties": {
+                "QueueName": {
+                    "Fn::Join": [
+                        "-",
+                        [
+                            {
+                                "Ref": "Environment"
+                            },
+                            {
+                                "Ref": "ComponentName"
+                            },
+                            "queue"
+                        ]
+                    ]
+                }
+            },
+            "Type": "AWS::SQS::Queue"
+        }
+    }
+}

@@ -1,7 +1,7 @@
 {
   "parameters": {
     "InstanceType": "t3.micro",
-    "CnameEntry": "digital-paper-edit-api.int",
+    "CnameEntry": "digital-paper-edit-audio-converter.int",
     "DomainNameBase": "ee74d3541ebec4a3.xhst.bbci.co.uk.",
     "Environment": "int",
     "MinSize": "1",

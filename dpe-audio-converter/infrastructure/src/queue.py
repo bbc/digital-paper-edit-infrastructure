@@ -3,7 +3,7 @@
 # Converted from IAM_Policies_SNS_Publish_To_SQS.template located at:
 # http://aws.amazon.com/cloudformation/aws-cloudformation-templates/
 
-from troposphere import GetAtt, Output, Ref, Template, Join
+from troposphere import Parameter, GetAtt, Output, Ref, Template, Join
 from troposphere.sns import Subscription, Topic
 from troposphere.sqs import Queue, QueuePolicy
 
@@ -15,19 +15,17 @@ t.set_description("AWS CloudFormation Sample Template: This template "
 component = t.add_parameter(Parameter(
     "ComponentName",
     Type="String",
-    Description=("Environment name to check against int, test, or live")
+    Description=("component name")
 ))
 
 environment = t.add_parameter(Parameter(
     "Environment",
-    Default=".",
-    AllowedPattern="^(int|test|live)$",
     Type="String",
     Description=("Environment name to check against int, test, or live")
 ))
 
 dpeTopic = t.add_parameter(Parameter(
-    "dpeTopic",
+    "DpeTopic",
     Default="",
     Type="String",
     Description=("SNS topic from the DPE API")
