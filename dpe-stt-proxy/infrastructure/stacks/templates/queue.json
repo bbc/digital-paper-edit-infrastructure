@@ -11,6 +11,10 @@
             "Description": "Environment name to check against int, test, or live",
             "Type": "String"
         },
+        "ReceiveMessageWaitTimeSeconds": {
+            "Default": 20,
+            "Type": "Integer"
+        },
         "SttBridgeAwsIspyTopic": {
             "Description": "SttBridgeAwsIspyTopic",
             "Type": "String"
@@ -30,6 +34,10 @@
         "SttOutputNotification": {
             "Description": "SttOutputNotification",
             "Type": "String"
+        },
+        "VisibilityTimeout": {
+            "Default": 30,
+            "Type": "Integer"
         }
     },
     "Resources": {
@@ -103,6 +111,12 @@
                             "queue"
                         ]
                     ]
+                },
+                "ReceiveMessageWaitTimeSeconds": {
+                    "Ref": "ReceiveMessageWaitTimeSeconds"
+                },
+                "VisibilityTimeout": {
+                    "Ref": "VisibilityTimeout"
                 }
             },
             "Type": "AWS::SQS::Queue"
