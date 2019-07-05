@@ -1,7 +1,7 @@
 [
     {
         "key": "AWS_REGION",
-        "value": "eu-west1"
+        "value": "eu-west-1"
     },
     {
         "key": "AWS_ACCOUNT",

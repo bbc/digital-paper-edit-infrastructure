@@ -1,0 +1,20 @@
+#!/bin/sh
+set -eu
+
+DIR=$1
+ENV=$2
+
+cd dpe-$DIR
+
+npm install bbc/cosmos-deploy#v3
+
+node_modules/.bin/cosmos-deploy update-repositories digital-paper-edit-$DIR $ENV 1.0.0
+node_modules/.bin/cosmos-deploy update-config digital-paper-edit-$DIR $ENV 1.0.0 || echo "No config files"
+node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-$DIR $ENV 1.0.0 dns
+node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-$DIR $ENV 1.0.0 main
+
+if [ $DIR = "stt-proxy" ] || [ $DIR = "audio-converter" ] ; then
+    node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-$DIR $ENV 1.0.0 queue;
+else
+	echo "Not a microservice, not provisioning queue"
+fi

@@ -1,0 +1,11 @@
+{
+  "parameters": {
+    "ComponentName": "digital-paper-edit-audio-converter",
+    "Environment": "test",
+    "DpeTopic": ""
+  },
+  "name_suffix": "queue",
+  "aws_account_id": "060170161162",
+  "region": "eu-west-1",
+  "service_stack": false
+}

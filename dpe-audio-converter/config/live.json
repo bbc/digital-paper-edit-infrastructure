@@ -1,7 +1,7 @@
 [
     {
         "key": "AWS_REGION",
-        "value": "eu-west-1"
+        "value": "eu-west1"
     },
     {
         "key": "AWS_ACCOUNT",
@@ -9,6 +9,6 @@
     },
     {
         "key": "SNS_TOPIC",
-        "value":"int-digital-paper-edit-api-sns"
+        "value":"live-digital-paper-edit-api-sns"
     }
 ]
