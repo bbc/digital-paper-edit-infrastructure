@@ -1,7 +1,7 @@
 {
   "parameters": {
     "InstanceType": "t2.micro",
-    "CnameEntry": "digital-paper-edit-stt",
+    "CnameEntry": "digital-paper-edit-stt-proxy",
     "DomainNameBase": "ee74d3541ebec4a3.xhst.bbci.co.uk.",
     "Environment": "live",
     "MinSize": "1",

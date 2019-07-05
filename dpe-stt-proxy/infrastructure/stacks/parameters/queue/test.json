@@ -1,6 +1,6 @@
 {
     "parameters": {
-      "ComponentName": "digital-paper-edit-stt",
+      "ComponentName": "digital-paper-edit-stt-proxy",
       "Environment": "test",
       "ReceiveMessageWaitTimeSeconds": 20,
       "VisibilityTimeout": 30,
