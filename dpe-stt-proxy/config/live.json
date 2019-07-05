@@ -22,5 +22,23 @@
   {
     "key": "LOG_ERROR",
     "value": "/var/log/digital-paper-edit-stt-proxy/error.log"
-  }
+  },
+  {
+    "key": "assume_role_arn",
+    "value": "arn:aws:iam::127888728614:role/LiveModavSttInfrastructur-AccessRoleFor06017016116-6FRN4CYRZEJE"
+  },
+  {
+    "key": "queue_url",
+    "value": "https://sqs.eu-west-1.amazonaws.com/LiveModavSttGatewayResources-Queue-1KR64NNJ2E2VB"
+  },
+  { "key": "customer", "value": "NewsLabsSttTestApp01" },
+  {
+    "key": "bucketInput",
+    "value": "livemodavsttinfrastructureresource-sttinputbucket-6u1s489jb9gg"
+  },
+  {
+    "key": "bucketOutput",
+    "value": "livemodavsttinfrastructureresourc-sttoutputbucket-iqt48bv2bjba"
+  },
+  { "key": "transcript_version", "value": "1.0.0" 
 ]
