@@ -1,0 +1,14 @@
+[
+    {
+        "key": "AWS_REGION",
+        "value": "eu-west1"
+    },
+    {
+        "key": "AWS_ACCOUNT",
+        "value":"060170161162"
+    },
+    {
+        "key": "SNS_TOPIC",
+        "value":"test-digital-paper-edit-api-sns"
+    }
+]
