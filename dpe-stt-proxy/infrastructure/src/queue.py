@@ -51,14 +51,28 @@ environment = t.add_parameter(Parameter(
     Description=("Environment name to check against int, test, or live")
 ))
 
-sqsqueue = t.add_resource(Queue(
+recvWaitSeconds = t.add_parameter(Parameter(
+    "ReceiveMessageWaitTimeSeconds",
+    Default=20,
+    Type="Integer"
+))
+
+visTimeout = t.add_parameter(Parameter(
+    "VisibilityTimeout",
+    Default=30,
+    Type="Integer"
+))
+
+sqsQueue = t.add_resource(Queue(
     "SQSQueue",
-    QueueName=Join("-", [Ref(environment), Ref(component), 'queue'])
+    QueueName=Join("-", [Ref(environment), Ref(component), 'queue']),
+    ReceiveMessageWaitTimeSeconds=Ref(recvWaitSeconds),
+    VisibilityTimeout=Ref(visTimeout)
 ))
 
 t.add_resource(QueuePolicy(
     "AllowSNS2SQSPolicy",
-    Queues=[Ref(sqsqueue)],
+    Queues=[Ref(sqsQueue)],
     PolicyDocument={
         "Version": "2008-10-17",
         "Id": "PublicationPolicy",
@@ -73,7 +87,7 @@ t.add_resource(QueuePolicy(
                 'sqs:SendMessage',
                 'sqs:GetQueueAttributes'
                 ],
-            "Resource": GetAtt(sqsqueue, "Arn"),
+            "Resource": GetAtt(sqsQueue, "Arn"),
             'Condition': {
                 'ForAnyValue:ArnEquals': {
                     'aws:SourceArn': [

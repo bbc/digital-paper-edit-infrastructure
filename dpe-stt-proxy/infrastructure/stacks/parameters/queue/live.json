@@ -2,6 +2,8 @@
     "parameters": {
       "ComponentName": "digital-paper-edit-stt",
       "Environment": "live",
+      "ReceiveMessageWaitTimeSeconds": 20,
+      "VisibilityTimeout": 30,
       "SttGatewayIspyTopic": "",
       "SttBridgeAwsIspyTopic": "",
       "SttIspyConformerIspyTopic": "",
