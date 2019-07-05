@@ -52,14 +52,14 @@ environment = t.add_parameter(Parameter(
 
 recvWaitSeconds = t.add_parameter(Parameter(
     "ReceiveMessageWaitTimeSeconds",
-    Default=20,
-    Type="Integer"
+    Default="20",
+    Type="Number"
 ))
 
 visTimeout = t.add_parameter(Parameter(
     "VisibilityTimeout",
-    Default=30,
-    Type="Integer"
+    Default="30",
+    Type="Number"
 ))
 
 sqsQueue = t.add_resource(Queue(

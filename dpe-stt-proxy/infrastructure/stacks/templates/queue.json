@@ -11,8 +11,8 @@
             "Type": "String"
         },
         "ReceiveMessageWaitTimeSeconds": {
-            "Default": 20,
-            "Type": "Integer"
+            "Default": "20",
+            "Type": "Number"
         },
         "SttBridgeAwsIspyTopic": {
             "Description": "SttBridgeAwsIspyTopic",
@@ -35,8 +35,8 @@
             "Type": "String"
         },
         "VisibilityTimeout": {
-            "Default": 30,
-            "Type": "Integer"
+            "Default": "30",
+            "Type": "Number"
         }
     },
     "Resources": {
