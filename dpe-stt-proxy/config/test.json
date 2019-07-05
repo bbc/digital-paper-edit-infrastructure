@@ -1,14 +1,26 @@
 [
-    {
-        "key": "AWS_REGION",
-        "value": "eu-west-1"
-    },
-    {
-        "key": "AWS_ACCOUNT",
-        "value":"060170161162"
-    },
-    {
-        "key": "SNS_TOPIC",
-        "value":"test-digital-paper-edit-api-sns"
-    }
+  {
+    "key": "AWS_REGION",
+    "value": "eu-west-1"
+  },
+  {
+    "key": "AWS_ACCOUNT",
+    "value": "060170161162"
+  },
+  {
+    "key": "QUEUE_NAME",
+    "value": "test-digital-paper-edit-stt-proxy-queue"
+  },
+  {
+    "key": "NODE_ENV",
+    "value": "production"
+  },
+  {
+    "key": "LOG_FILE",
+    "value": "/var/log/digital-paper-edit-stt-proxy/application.log"
+  },
+  {
+    "key": "LOG_ERROR",
+    "value": "/var/log/digital-paper-edit-stt-proxy/error.log"
+  }
 ]
