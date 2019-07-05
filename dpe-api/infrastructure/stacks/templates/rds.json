@@ -1,0 +1,75 @@
+{
+    "Parameters": {
+        "ComponentName": {
+            "Description": "component name",
+            "Type": "String"
+        },
+        "DBPassword": {
+            "AllowedPattern": "[a-zA-Z0-9]*",
+            "ConstraintDescription": "must contain only alphanumeric characters.",
+            "Description": "The database admin account password",
+            "MaxLength": "41",
+            "MinLength": "1",
+            "NoEcho": true,
+            "Type": "String"
+        },
+        "Environment": {
+            "Description": "Environment name to check against int, test, or live",
+            "Type": "String"
+        },
+        "RdsSubnetGroupName": {
+            "Description": "The id of the subnet in which to put the RDS instance",
+            "Type": "String"
+        },
+        "RdsVpcId": {
+            "Description": "The id of the VPC in which to put the RDS instance",
+            "Type": "String"
+        }
+    },
+    "Resources": {
+        "RdsSecurityGroup": {
+            "Properties": {
+                "GroupDescription": "Permit Postgres client access from BBC CIDR block",
+                "SecurityGroupIngress": [
+                    {
+                        "CidrIp": "132.185.0.0/16",
+                        "FromPort": 5432,
+                        "IpProtocol": "tcp",
+                        "ToPort": 5432
+                    }
+                ],
+                "VpcId": {
+                    "Ref": "RdsVpcId"
+                }
+            },
+            "Type": "AWS::EC2::SecurityGroup"
+        },
+        "dpeDB": {
+            "DependsOn": [
+                "RdsSecurityGroup"
+            ],
+            "Properties": {
+                "AllocatedStorage": "10",
+                "AvailabilityZone": "eu-west-1a",
+                "DBInstanceClass": "db.t2.micro",
+                "DBSubnetGroupName": {
+                    "Ref": "RdsSubnetGroupName"
+                },
+                "Engine": "postgres",
+                "EngineVersion": "11.4",
+                "MasterUserPassword": {
+                    "Ref": "DBPassword"
+                },
+                "MasterUsername": "root",
+                "PubliclyAccessible": "false",
+                "StorageType": "standard",
+                "VPCSecurityGroups": [
+                    {
+                        "Ref": "RdsSecurityGroup"
+                    }
+                ]
+            },
+            "Type": "AWS::RDS::DBInstance"
+        }
+    }
+}

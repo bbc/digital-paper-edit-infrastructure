@@ -1,0 +1,9 @@
+{
+  "parameters": {
+    "Environment": "live",
+  },
+  "name_suffix": "rds",
+  "aws_account_id": "060170161162",
+  "region": "eu-west-1",
+  "service_stack": false
+}
