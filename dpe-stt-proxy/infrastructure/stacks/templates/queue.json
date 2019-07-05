@@ -6,8 +6,7 @@
             "Type": "String"
         },
         "Environment": {
-            "AllowedPattern": "^(int|test|live)$",
-            "Default": ".",
+            "Default": "int",
             "Description": "Environment name to check against int, test, or live",
             "Type": "String"
         },

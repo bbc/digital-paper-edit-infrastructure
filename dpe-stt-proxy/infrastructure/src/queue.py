@@ -45,8 +45,7 @@ sttOutputNotification = t.add_parameter(Parameter(
 
 environment = t.add_parameter(Parameter(
     "Environment",
-    Default=".",
-    AllowedPattern="^(int|test|live)$",
+    Default="int",
     Type="String",
     Description=("Environment name to check against int, test, or live")
 ))
