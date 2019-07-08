@@ -1,0 +1,17 @@
+{
+    "parameters": {
+      "ComponentName": "digital-paper-edit-stt-proxy",
+      "Environment": "int",
+      "ReceiveMessageWaitTimeSeconds": 20,
+      "VisibilityTimeout": 30,
+      "SttGatewayIspyTopic": "arn:aws:sns:eu-west-1:038610054328:TestModavSttGatewayResources-IspyTopic-17432X1FNW4H4",
+      "SttBridgeAwsIspyTopic": "arn:aws:sns:eu-west-1:038610054328:TestModavSttBridgeAwsResources-IspyTopic-1RPQ4C97PHFW6",
+      "SttIspyConformerIspyTopic": "arn:aws:sns:eu-west-1:038610054328:TestModavSttIspyConformerResources-IspyTopic-NPIG38C0G9NL",
+      "SttNormaliserAwsIspyTopic": "arn:aws:sns:eu-west-1:038610054328:TestModavSttNormaliserAwsResources-IspyTopic-1Q2XE0URIZBM9",
+      "SttOutputNotification": "arn:aws:sns:eu-west-1:038610054328:TestModavSttInfrastructureResources-OutputNotificationTopic-3SJ57WP2299V"
+    },
+    "name_suffix": "queue",
+    "aws_account_id": "060170161162",
+    "region": "eu-west-1",
+    "service_stack": false
+  }

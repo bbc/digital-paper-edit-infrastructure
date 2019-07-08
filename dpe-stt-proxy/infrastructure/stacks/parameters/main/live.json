@@ -1,0 +1,21 @@
+{
+  "parameters": {
+    "InstanceType": "t2.micro",
+    "CnameEntry": "digital-paper-edit-stt-proxy",
+    "DomainNameBase": "ee74d3541ebec4a3.xhst.bbci.co.uk.",
+    "Environment": "live",
+    "MinSize": "1",
+    "MaxSize": "4",
+    "DesiredCapacity": "1",
+    "UpdatePauseTime": "PT0S",
+    "UpdateMinInService": "0",
+    "UpdateMaxBatchSize": "1",
+    "KeyName": "cosmos",
+    "CoreInfrastructureStackName": "core-infrastructure",
+    "ImageId": "ami-d834aba1"
+  },
+  "name_suffix": "main",
+  "aws_account_id": "060170161162",
+  "region": "eu-west-1",
+  "service_stack": true
+}
