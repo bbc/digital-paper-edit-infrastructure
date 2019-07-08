@@ -1,22 +1,102 @@
-from troposphere import Parameter, Ref, Template, Join
+import sys
 
-from troposphere.rds import DBInstance, DBParameterGroup
-from troposphere.ec2 import SecurityGroup, SecurityGroupRule
-
-BBC_CIDR_BLOCK = '132.185.0.0/16'
+from troposphere import Parameter, Ref, Template, Join, GetAtt, Output
+from troposphere.ec2 import SecurityGroup, SecurityGroupIngress
+from troposphere.rds import DBInstance, DBSubnetGroup
 
 t = Template()
 
-componentName = t.add_parameter(Parameter(
+t.add_version("2010-09-09")
+
+allocated_storage = t.add_parameter(Parameter(
+    "AllocatedStorage",
+    Default="20",
+    Type="Number",
+    MinValue="5",
+    MaxValue="1024",
+    ConstraintDescription="must be between 5 and 1024Gb.",
+    Description="The amount of storage (in gibibytes) to allocate for the DB "
+                "instance."
+))
+
+api_security_group_id = t.add_parameter(Parameter(
+    "APISecurityGroupID",
+    Description="The SecurityGroupID of the API EC2 instance",
+    Type="String"
+))
+
+subnet_group = t.add_resource(DBSubnetGroup(
+    "DBSubnetGroup",
+    DBSubnetGroupDescription="Subnets available for the RDS DB Instance",
+    SubnetIds=["subnet-1f2a9046", "subnet-19cdad6e", "subnet-19cdad6e"]
+))
+
+security_group = t.add_resource(SecurityGroup(
+    "SecurityGroup",
+    GroupDescription="Enable access to this RDS instance from specific EC2 instances only",
+    VpcId="vpc-604fc005",
+))
+
+security_group_ingress = t.add_resource(SecurityGroupIngress(
+    "PostgresSecurityGroupIngress",
+    IpProtocol="tcp",
+    FromPort="5432",
+    ToPort="5432",
+    SourceSecurityGroupId=Ref(api_security_group_id),
+    GroupId=Ref(security_group)
+))
+
+db_instance_class = t.add_parameter(Parameter(
+    "DBClass",
+    Default="db.t2.micro",
+    Description="The compute and memory capacity of the DB instance, "
+                "for example, db.m4.large.",
+    Type="String",
+    ConstraintDescription="must select a valid database instance type.",
+))
+
+component_name = t.add_parameter(Parameter(
     "ComponentName",
     Type="String",
-    Description=("component name")
+    Description="Your component name"
 ))
 
 environment = t.add_parameter(Parameter(
     "Environment",
     Type="String",
-    Description=("Environment name to check against int, test, or live")
+    Description="Environment name"
+))
+
+
+engine_ver = t.add_parameter(Parameter(
+    "DBEngineVersion",
+    Description="The version number of the database engine to use.",
+    Type="String",
+    Default="11.4"
+))
+
+dbname = t.add_parameter(Parameter(
+    "DBName",
+    Default="MyDatabase",
+    Description="The database name",
+    Type="String",
+    MinLength="1",
+    MaxLength="64",
+    AllowedPattern="[a-zA-Z][a-zA-Z0-9]*",
+    ConstraintDescription=("must begin with a letter and contain only"
+                           " alphanumeric characters.")
+))
+
+dbuser = t.add_parameter(Parameter(
+    "DBUser",
+    NoEcho=True,
+    Description="The database admin account username",
+    Type="String",
+    MinLength="1",
+    MaxLength="63",
+    AllowedPattern="[a-zA-Z][a-zA-Z0-9]*",
+    ConstraintDescription=("must begin with a letter and contain only"
+                           " alphanumeric characters.")
 ))
 
 dbpassword = t.add_parameter(Parameter(
@@ -30,48 +110,40 @@ dbpassword = t.add_parameter(Parameter(
     ConstraintDescription="must contain only alphanumeric characters."
 ))
 
-rds_vpc_id = t.add_parameter(Parameter(
-    "RdsVpcId",
-    Type="String",
-    Description="The id of the VPC in which to put the RDS instance"
-))
-
-rds_subnet_group_name = t.add_parameter(Parameter(
-    "RdsSubnetGroupName",
-    Type="String",
-    Description="The id of the subnet in which to put the RDS instance"
-))
-
-rds_security_group = t.add_resource(SecurityGroup(
-    'RdsSecurityGroup',
-    VpcId=Ref(rds_vpc_id),
-    SecurityGroupIngress=[
-        SecurityGroupRule(
-            IpProtocol='tcp',
-            CidrIp=BBC_CIDR_BLOCK,
-            FromPort=5432,
-            ToPort=5432
-        )
-    ],
-    GroupDescription='Permit Postgres client access from BBC CIDR block'
-))
-
-database = t.add_resource(DBInstance(
-    # Join("-",[Ref(environment), Ref(componentName), 'db']),
-    "dpeDB",
+db_instance_class = t.add_resource(DBInstance(
+    "DBInstance",
+    DBName="postgres",
     AllocatedStorage="10",
-    AvailabilityZone='eu-west-1a',
-    DBInstanceClass='db.t2.micro',
-    # DBName=db_name,
+    DBInstanceClass=Ref(db_instance_class),
+    DBInstanceIdentifier=Join(
+        "-", [Ref(environment), Ref(component_name),
+             "postgres"]
+    ),
     Engine="postgres",
-    EngineVersion="11.4",
-    MasterUsername='root',
+    EngineVersion=Ref(engine_ver),
+    MasterUsername=Ref(dbuser),
     MasterUserPassword=Ref(dbpassword),
-    PubliclyAccessible=False,
-    StorageType='standard',
-    DBSubnetGroupName=Ref(rds_subnet_group_name),
-    VPCSecurityGroups=[Ref(rds_security_group)],
-    DependsOn=['RdsSecurityGroup']
+    DBSubnetGroupName=Ref(subnet_group),
+    VPCSecurityGroups=[Ref(security_group)],
 ))
 
-print(t.to_json())
+
+template = t.to_json()
+
+t.add_output(Output(
+    "JDBCConnectionString",
+    Description="JDBC connection string for database",
+    Value=Join("", [
+        "jdbc:postgresql://",
+        GetAtt("DBInstance", "Endpoint.Address"),
+        GetAtt("DBInstance", "Endpoint.Port"),
+        "/",
+        Ref(dbname)
+    ])
+))
+
+
+if len(sys.argv) > 1:
+    open(sys.argv[1], "w").write(template + "\n")
+else:
+    print(template)

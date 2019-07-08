@@ -1,7 +1,40 @@
 {
+    "AWSTemplateFormatVersion": "2010-09-09",
     "Parameters": {
+        "APISecurityGroupID": {
+            "Description": "The SecurityGroupID of the API EC2 instance",
+            "Type": "String"
+        },
+        "AllocatedStorage": {
+            "ConstraintDescription": "must be between 5 and 1024Gb.",
+            "Default": "20",
+            "Description": "The amount of storage (in gibibytes) to allocate for the DB instance.",
+            "MaxValue": "1024",
+            "MinValue": "5",
+            "Type": "Number"
+        },
         "ComponentName": {
-            "Description": "component name",
+            "Description": "Your component name",
+            "Type": "String"
+        },
+        "DBClass": {
+            "ConstraintDescription": "must select a valid database instance type.",
+            "Default": "db.t2.micro",
+            "Description": "The compute and memory capacity of the DB instance, for example, db.m4.large.",
+            "Type": "String"
+        },
+        "DBEngineVersion": {
+            "Default": "11.4",
+            "Description": "The version number of the database engine to use.",
+            "Type": "String"
+        },
+        "DBName": {
+            "AllowedPattern": "[a-zA-Z][a-zA-Z0-9]*",
+            "ConstraintDescription": "must begin with a letter and contain only alphanumeric characters.",
+            "Default": "MyDatabase",
+            "Description": "The database name",
+            "MaxLength": "64",
+            "MinLength": "1",
             "Type": "String"
         },
         "DBPassword": {
@@ -13,63 +46,94 @@
             "NoEcho": true,
             "Type": "String"
         },
+        "DBUser": {
+            "AllowedPattern": "[a-zA-Z][a-zA-Z0-9]*",
+            "ConstraintDescription": "must begin with a letter and contain only alphanumeric characters.",
+            "Description": "The database admin account username",
+            "MaxLength": "63",
+            "MinLength": "1",
+            "NoEcho": true,
+            "Type": "String"
+        },
         "Environment": {
-            "Description": "Environment name to check against int, test, or live",
-            "Type": "String"
-        },
-        "RdsSubnetGroupName": {
-            "Description": "The id of the subnet in which to put the RDS instance",
-            "Type": "String"
-        },
-        "RdsVpcId": {
-            "Description": "The id of the VPC in which to put the RDS instance",
+            "Description": "Environment name",
             "Type": "String"
         }
     },
     "Resources": {
-        "RdsSecurityGroup": {
-            "Properties": {
-                "GroupDescription": "Permit Postgres client access from BBC CIDR block",
-                "SecurityGroupIngress": [
-                    {
-                        "CidrIp": "132.185.0.0/16",
-                        "FromPort": 5432,
-                        "IpProtocol": "tcp",
-                        "ToPort": 5432
-                    }
-                ],
-                "VpcId": {
-                    "Ref": "RdsVpcId"
-                }
-            },
-            "Type": "AWS::EC2::SecurityGroup"
-        },
-        "dpeDB": {
-            "DependsOn": [
-                "RdsSecurityGroup"
-            ],
+        "DBInstance": {
             "Properties": {
                 "AllocatedStorage": "10",
-                "AvailabilityZone": "eu-west-1a",
-                "DBInstanceClass": "db.t2.micro",
+                "DBInstanceClass": {
+                    "Ref": "DBClass"
+                },
+                "DBInstanceIdentifier": {
+                    "Fn::Join": [
+                        "-",
+                        [
+                            {
+                                "Ref": "Environment"
+                            },
+                            {
+                                "Ref": "ComponentName"
+                            },
+                            "postgres"
+                        ]
+                    ]
+                },
+                "DBName": "postgres",
                 "DBSubnetGroupName": {
-                    "Ref": "RdsSubnetGroupName"
+                    "Ref": "DBSubnetGroup"
                 },
                 "Engine": "postgres",
-                "EngineVersion": "11.4",
+                "EngineVersion": {
+                    "Ref": "DBEngineVersion"
+                },
                 "MasterUserPassword": {
                     "Ref": "DBPassword"
                 },
-                "MasterUsername": "root",
-                "PubliclyAccessible": "false",
-                "StorageType": "standard",
+                "MasterUsername": {
+                    "Ref": "DBUser"
+                },
                 "VPCSecurityGroups": [
                     {
-                        "Ref": "RdsSecurityGroup"
+                        "Ref": "SecurityGroup"
                     }
                 ]
             },
             "Type": "AWS::RDS::DBInstance"
+        },
+        "DBSubnetGroup": {
+            "Properties": {
+                "DBSubnetGroupDescription": "Subnets available for the RDS DB Instance",
+                "SubnetIds": [
+                    "subnet-1f2a9046",
+                    "subnet-19cdad6e",
+                    "subnet-19cdad6e"
+                ]
+            },
+            "Type": "AWS::RDS::DBSubnetGroup"
+        },
+        "PostgresSecurityGroupIngress": {
+            "Properties": {
+                "FromPort": "5432",
+                "GroupId": {
+                    "Ref": "SecurityGroup"
+                },
+                "IpProtocol": "tcp",
+                "SourceSecurityGroupId": {
+                    "Ref": "APISecurityGroupID"
+                },
+                "ToPort": "5432"
+            },
+            "Type": "AWS::EC2::SecurityGroupIngress"
+        },
+        "SecurityGroup": {
+            "Properties": {
+                "GroupDescription": "Enable access to this RDS instance from specific EC2 instances only",
+                "VpcId": "vpc-604fc005"
+            },
+            "Type": "AWS::EC2::SecurityGroup"
         }
     }
 }

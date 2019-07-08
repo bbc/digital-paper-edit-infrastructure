@@ -1,6 +1,11 @@
 {
   "parameters": {
+    "ComponentName": "digital-paper-edit",
     "Environment": "live",
+    "DBUser": "root",
+    "DBPassword": "password",
+    "DBName": "postgres",
+    "APISecurityGroupID": ""
   },
   "name_suffix": "rds",
   "aws_account_id": "060170161162",
