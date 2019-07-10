@@ -12,6 +12,10 @@
     "value": "int-digital-paper-edit-stt-proxy-queue"
   },
   {
+    "key": "LOG_GROUP_NAME",
+    "value": "int-digital-paper-edit-stt-proxy-log"
+  },
+  {
     "key": "NODE_ENV",
     "value": "production"
   },
