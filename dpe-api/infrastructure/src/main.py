@@ -62,4 +62,16 @@ t.resources[IAM.COMPONENT_POLICY].PolicyDocument.Statement.extend([
         Effect=Allow
     )])
 
+t.resources[IAM.COMPONENT_POLICY].PolicyDocument.Statement.extend([
+    Statement(
+        Action=[
+            Action('logs', 'CreateLogGroup'),
+            Action('logs', 'CreateLogStream'),
+            Action('logs', 'PutLogEvents'),
+            Action('logs', 'DescribeLogStreams'),
+        ],
+        Resource=["arn:aws:logs:*:*:*"],
+        Effect=Allow
+    )])
+
 print(t.to_json())

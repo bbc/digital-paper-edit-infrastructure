@@ -414,6 +414,18 @@
                                     "ec2.amazonaws.com"
                                 ]
                             }
+                        },
+                        {
+                            "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents",
+                                "logs:DescribeLogStreams"
+                            ],
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:logs:*:*:*"
+                            ]
                         }
                     ]
                 },

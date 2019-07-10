@@ -1,0 +1,10 @@
+{
+    "parameters": {
+        "LogGroupName": "digital-paper-edit-api",
+        "Environment": "live"
+    },
+    "name_suffix": "monitoring",
+    "aws_account_id": "060170161162",
+    "region": "eu-west-1",
+    "service_stack": false
+}
