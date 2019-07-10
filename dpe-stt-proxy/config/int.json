@@ -24,21 +24,21 @@
     "value": "/var/log/digital-paper-edit-stt-proxy/error.log"
   },
   {
-    "key": "assume_role_arn",
+    "key": "PSTT_CLIENT_ROLE_ARN",
     "value": "arn:aws:iam::127888728614:role/LiveModavSttInfrastructur-AccessRoleFor06017016116-6FRN4CYRZEJE"
   },
   {
-    "key": "queue_url",
+    "key": "PSTT_IN_SQS_URI",
     "value": "https://sqs.eu-west-1.amazonaws.com/LiveModavSttGatewayResources-Queue-1KR64NNJ2E2VB"
   },
-  { "key": "customer", "value": "NewsLabsSttTestApp01" },
+  { "key": "PSTT_CLIENT_NAME", "value": "NewsLabsSttTestApp01" },
   {
-    "key": "bucketInput",
+    "key": "PSTT_IN_BUCKET_NAME",
     "value": "livemodavsttinfrastructureresource-sttinputbucket-6u1s489jb9gg"
   },
   {
-    "key": "bucketOutput",
+    "key": "PSTT_OUT_BUCKET_NAME",
     "value": "livemodavsttinfrastructureresourc-sttoutputbucket-iqt48bv2bjba"
   },
-  { "key": "transcript_version", "value": "1.0.0" }
+  { "key": "PSTT_TRANSCRIPT_VERSION", "value": "1.0.0" }
 ]
