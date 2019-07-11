@@ -130,19 +130,6 @@ db_instance_class = t.add_resource(DBInstance(
 
 template = t.to_json()
 
-t.add_output(Output(
-    "JDBCConnectionString",
-    Description="JDBC connection string for database",
-    Value=Join("", [
-        "jdbc:postgresql://",
-        GetAtt("DBInstance", "Endpoint.Address"),
-        GetAtt("DBInstance", "Endpoint.Port"),
-        "/",
-        Ref(dbname)
-    ])
-))
-
-
 if len(sys.argv) > 1:
     open(sys.argv[1], "w").write(template + "\n")
 else:
