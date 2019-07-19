@@ -3,7 +3,7 @@
       "InstanceType": "t2.micro",
       "CnameEntry": "digital-paper-edit-stt-proxy.int",
       "DomainNameBase": "ee74d3541ebec4a3.xhst.bbci.co.uk.",
-      "Environment": "test",
+      "Environment": "int",
       "MinSize": "1",
       "MaxSize": "4",
       "DesiredCapacity": "1",
