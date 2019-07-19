@@ -15,7 +15,9 @@ node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-$DIR $ENV 1.0
 node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-$DIR $ENV 1.0.0 monitoring || echo "Couldn't create log stack"; 
 
 if [ $DIR = "stt-proxy" ] || [ $DIR = "audio-converter" ] ; then
-    node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-$DIR $ENV 1.0.0 queue; 
+    node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-$DIR $ENV 1.0.0 queue;
+elif [ $DIR = "api" ] || [ $DIR = "api" ] ; then
+    node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-$DIR $ENV 1.0.0 rds;
 else
-	echo "Not a microservice, not provisioning queue"
+	echo "No other stacks to provision"
 fi
