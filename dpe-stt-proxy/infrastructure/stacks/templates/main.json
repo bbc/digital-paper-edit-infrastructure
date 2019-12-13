@@ -373,6 +373,24 @@
                                 "logs:PutLogEvents",
                                 "logs:DescribeLogStreams",
                                 "sqs:ReceiveMessage",
+                                "sqs:DeleteMessage",
+                                "s3:GetObject",
+                                "s3:ListObject"
+                            ],
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:logs:*:*:*",
+                                "arn:aws:sqs:*:*:*",
+                                "arn:aws:s3:*:*:*"
+                            ]
+                        },
+                        {
+                            "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents",
+                                "logs:DescribeLogStreams",
+                                "sqs:ReceiveMessage",
                                 "sqs:DeleteMessage"
                             ],
                             "Effect": "Allow",

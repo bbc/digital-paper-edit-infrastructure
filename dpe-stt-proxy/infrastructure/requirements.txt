@@ -1,3 +1,13 @@
-troposphere
-git+ssh://git@github.com/BBC/cosmos-troposphere
-flake8
+autopep8==1.4.4
+awacs==0.9.7
+cfn-flip==1.2.2
+Click==7.0
+cosmosTroposphere==3.0.0
+entrypoints==0.3
+flake8==3.7.9
+mccabe==0.6.1
+pycodestyle==2.5.0
+pyflakes==2.1.1
+PyYAML==5.2
+six==1.13.0
+troposphere==2.5.3

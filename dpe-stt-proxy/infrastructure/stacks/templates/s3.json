@@ -1,0 +1,76 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "AWS CloudFormation Sample Template S3_Bucket: Sample template showing how to create a publicly accessible S3 bucket. **WARNING** This template creates an Amazon S3 Bucket. You will be billed for the AWS resources used if you create a stack from this template.",
+    "Parameters": {
+        "Environment": {
+            "Type": "String"
+        },
+        "S3bucket": {
+            "Type": "String"
+        },
+        "UserName": {
+            "Type": "String"
+        }
+    },
+    "Resources": {
+        "S3Bucket": {
+            "Properties": {
+                "BucketName": {
+                    "Fn::Join": [
+                        "-",
+                        [
+                            {
+                                "Ref": "Environment"
+                            },
+                            {
+                                "Ref": "S3bucket"
+                            }
+                        ]
+                    ]
+                }
+            },
+            "Type": "AWS::S3::Bucket"
+        },
+        "UploadUser": {
+            "Properties": {
+                "Policies": [
+                    {
+                        "PolicyDocument": {
+                            "Statement": [
+                                {
+                                    "Action": [
+                                        "s3:PutObject"
+                                    ],
+                                    "Effect": "Allow",
+                                    "Resource": [
+                                        {
+                                            "Fn::GetAtt": [
+                                                "S3Bucket",
+                                                "Arn"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        "PolicyName": "UploadPolicy"
+                    }
+                ],
+                "UserName": {
+                    "Fn::Join": [
+                        "-",
+                        [
+                            {
+                                "Ref": "Environment"
+                            },
+                            {
+                                "Ref": "UserName"
+                            }
+                        ]
+                    ]
+                }
+            },
+            "Type": "AWS::IAM::User"
+        }
+    }
+}

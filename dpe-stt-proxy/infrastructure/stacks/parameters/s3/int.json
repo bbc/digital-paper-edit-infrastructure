@@ -1,0 +1,11 @@
+{
+  "parameters": {
+    "S3bucket": "digital-paper-edit-audio",
+    "Environment": "int",
+    "UserName": "digital-paper-edit-uploader"
+  },
+  "name_suffix": "bucket",
+  "aws_account_id": "060170161162",
+  "region": "eu-west-1",
+  "service_stack": false
+}
