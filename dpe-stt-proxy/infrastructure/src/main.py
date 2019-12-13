@@ -16,6 +16,28 @@ t.resources[IAM.COMPONENT_POLICY].PolicyDocument.Statement.extend([
             Action('logs', 'PutLogEvents'),
             Action('logs', 'DescribeLogStreams'),
             Action('sqs', 'ReceiveMessage'),
+            Action('sqs', 'DeleteMessage'),
+            Action('s3', 'GetObject'),
+            Action('s3', 'ListObject'),
+        ],
+        Resource=[
+            "arn:aws:logs:*:*:*",
+            "arn:aws:sqs:*:*:*",
+            "arn:aws:s3:*:*:*"
+        ],
+        Effect=Allow
+    ),
+])
+
+
+t.resources[IAM.COMPONENT_POLICY].PolicyDocument.Statement.extend([
+    Statement(
+        Action=[
+            Action('logs', 'CreateLogGroup'),
+            Action('logs', 'CreateLogStream'),
+            Action('logs', 'PutLogEvents'),
+            Action('logs', 'DescribeLogStreams'),
+            Action('sqs', 'ReceiveMessage'),
             Action('sqs', 'DeleteMessage')
         ],
         Resource=[
