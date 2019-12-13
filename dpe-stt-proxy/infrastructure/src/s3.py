@@ -17,7 +17,7 @@ t.set_description(
 t.set_version("2010-09-09")
 
 s3bucketName = t.add_parameter(Parameter(
-    "S3bucket",
+    "S3BucketName",
     Type="String"
 ))
 
@@ -47,7 +47,7 @@ ExternalUploadRole = t.add_resource(User(
                 Statement(
                     Effect=Allow,
                     Action=[PutObject],
-                    Resource=[GetAtt(S3bucket, "Arn")],
+                    Resource=[Join("/", [GetAtt(S3bucket, "Arn"), "*"])],
                 )
             ])
     )]

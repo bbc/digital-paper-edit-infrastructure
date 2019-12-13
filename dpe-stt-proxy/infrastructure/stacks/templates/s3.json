@@ -5,7 +5,7 @@
         "Environment": {
             "Type": "String"
         },
-        "S3bucket": {
+        "S3BucketName": {
             "Type": "String"
         },
         "UserName": {
@@ -23,7 +23,7 @@
                                 "Ref": "Environment"
                             },
                             {
-                                "Ref": "S3bucket"
+                                "Ref": "S3BucketName"
                             }
                         ]
                     ]
@@ -44,9 +44,17 @@
                                     "Effect": "Allow",
                                     "Resource": [
                                         {
-                                            "Fn::GetAtt": [
-                                                "S3Bucket",
-                                                "Arn"
+                                            "Fn::Join": [
+                                                "/",
+                                                [
+                                                    {
+                                                        "Fn::GetAtt": [
+                                                            "S3Bucket",
+                                                            "Arn"
+                                                        ]
+                                                    },
+                                                    "*"
+                                                ]
                                             ]
                                         }
                                     ]
