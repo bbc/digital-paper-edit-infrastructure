@@ -1,5 +1,5 @@
 from troposphere.s3 import Bucket, BucketOwnerFullControl
-from troposphere.iam import Role, InstanceProfile, Policy
+from troposphere.iam import User, InstanceProfile, Policy
 from troposphere import Parameter, Ref, Template, Join, GetAtt, Output
 from awacs.s3 import PutObject
 from awacs.sts import AssumeRole
@@ -21,8 +21,8 @@ s3bucketName = t.add_parameter(Parameter(
     Type="String"
 ))
 
-roleName = t.add_parameter(Parameter(
-    "RoleName",
+userName = t.add_parameter(Parameter(
+    "UserName",
     Type="String"
 ))
 
@@ -37,18 +37,9 @@ S3bucket = t.add_resource(Bucket(
 ))
 
 
-UploaderRole = t.add_resource(Role(
-    "UploaderRole",
-    AssumeRolePolicyDocument=PolicyDocument(
-        Statement=[
-            Statement(
-                Effect=Allow,
-                Action=[AssumeRole],
-                Principal=Principal("AWS", "*"),
-            )
-        ]
-    ),
-    RoleName=Join("-", [Ref(environment), Ref(roleName)]),
+ExternalUploadRole = t.add_resource(User(
+    "UploadUser",
+    UserName=Join("-", [Ref(environment), Ref(userName)]),
     Policies=[Policy(
         PolicyName="UploadPolicy",
         PolicyDocument=PolicyDocument(

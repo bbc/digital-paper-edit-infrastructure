@@ -2,7 +2,7 @@
   "parameters": {
     "S3bucket": "digital-paper-edit-audio",
     "Environment": "test",
-    "RoleName": "digital-paper-edit-uploader"
+    "UserName": "digital-paper-edit-uploader"
   },
   "name_suffix": "bucket",
   "aws_account_id": "060170161162",

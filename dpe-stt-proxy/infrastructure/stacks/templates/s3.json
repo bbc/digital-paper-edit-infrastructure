@@ -5,10 +5,10 @@
         "Environment": {
             "Type": "String"
         },
-        "RoleName": {
+        "S3bucket": {
             "Type": "String"
         },
-        "S3bucket": {
+        "UserName": {
             "Type": "String"
         }
     },
@@ -31,21 +31,8 @@
             },
             "Type": "AWS::S3::Bucket"
         },
-        "UploaderRole": {
+        "UploadUser": {
             "Properties": {
-                "AssumeRolePolicyDocument": {
-                    "Statement": [
-                        {
-                            "Action": [
-                                "sts:AssumeRole"
-                            ],
-                            "Effect": "Allow",
-                            "Principal": {
-                                "AWS": "*"
-                            }
-                        }
-                    ]
-                },
                 "Policies": [
                     {
                         "PolicyDocument": {
@@ -69,7 +56,7 @@
                         "PolicyName": "UploadPolicy"
                     }
                 ],
-                "RoleName": {
+                "UserName": {
                     "Fn::Join": [
                         "-",
                         [
@@ -77,13 +64,13 @@
                                 "Ref": "Environment"
                             },
                             {
-                                "Ref": "RoleName"
+                                "Ref": "UserName"
                             }
                         ]
                     ]
                 }
             },
-            "Type": "AWS::IAM::Role"
+            "Type": "AWS::IAM::User"
         }
     }
 }
