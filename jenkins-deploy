@@ -14,7 +14,7 @@ node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-$DIR $ENV 1.0
 node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-$DIR $ENV 1.0.0 main
 node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-$DIR $ENV 1.0.0 monitoring || echo "Couldn't create log stack"; 
 
-if [ $DIR = "stt-proxy" ] || [ $DIR = "audio-converter" ] ; then
+if [ $DIR = "stt-proxy" ] ; then
     node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-$DIR $ENV 1.0.0 queue;
     node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-$DIR $ENV 1.0.0 s3 
 elif [ $DIR = "api" ] || [ $DIR = "api" ] ; then
