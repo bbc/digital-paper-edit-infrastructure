@@ -1,6 +1,6 @@
 {
   "parameters": {
-    "S3bucket": "newslabs-stt-media-to-transcribe",
+    "S3bucket": "newslabs-stt-media-to-transcribe-test",
     "Environment": "test",
     "UserName": "digital-paper-edit-uploader"
   },

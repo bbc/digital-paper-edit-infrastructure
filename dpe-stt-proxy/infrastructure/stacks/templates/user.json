@@ -27,27 +27,12 @@
                                     "Resource": [
                                         {
                                             "Fn::Join": [
-                                                "/",
+                                                "",
                                                 [
+                                                    "arn:aws:s3:::",
                                                     {
-                                                        "Fn::GetAtt": [
-                                                            {
-                                                                "Fn::Join": [
-                                                                    "-",
-                                                                    [
-                                                                        {
-                                                                            "Ref": "S3BucketName"
-                                                                        },
-                                                                        {
-                                                                            "Ref": "Environment"
-                                                                        }
-                                                                    ]
-                                                                ]
-                                                            },
-                                                            "Arn"
-                                                        ]
-                                                    },
-                                                    "*"
+                                                        "Ref": "S3BucketName"
+                                                    }
                                                 ]
                                             ]
                                         }
