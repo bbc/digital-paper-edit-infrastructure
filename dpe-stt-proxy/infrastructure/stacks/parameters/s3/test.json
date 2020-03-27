@@ -1,9 +1,8 @@
 {
   "parameters": {
-    "S3bucket": "digital-paper-edit-audio",
+    "S3bucket": "newslabs-stt-media-to-transcribe",
     "Environment": "test",
-    "UserName": "digital-paper-edit-uploader",
-    "EventQueue": "digital-paper-edit-stt-proxy-queue"
+    "UserName": "digital-paper-edit-uploader"
   },
   "name_suffix": "bucket",
   "aws_account_id": "060170161162",
