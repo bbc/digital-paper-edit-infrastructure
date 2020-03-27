@@ -2,7 +2,8 @@
   "parameters": {
     "S3bucket": "digital-paper-edit-audio",
     "Environment": "test",
-    "UserName": "digital-paper-edit-uploader"
+    "UserName": "digital-paper-edit-uploader",
+    "EventQueue": "digital-paper-edit-stt-proxy-queue"
   },
   "name_suffix": "bucket",
   "aws_account_id": "060170161162",

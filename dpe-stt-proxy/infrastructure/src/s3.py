@@ -1,4 +1,4 @@
-from troposphere.s3 import Bucket, BucketOwnerFullControl
+from troposphere.s3 import Bucket, BucketOwnerFullControl, NotificationConfiguration, QueueConfigurations
 from troposphere.iam import User, InstanceProfile, Policy
 from troposphere import Parameter, Ref, Template, Join, GetAtt, Output
 from awacs.s3 import PutObject
@@ -31,10 +31,27 @@ environment = t.add_parameter(Parameter(
     Type="String"
 ))
 
-S3bucket = t.add_resource(Bucket(
-    "S3Bucket",
-    BucketName=Join("-", [Ref(environment), Ref(s3bucketName)])
+queue = t.add_parameter(Parameter(
+    "EventQueue",
+    Type="String"
 ))
+
+S3bucket = t.add_resource(
+    Bucket(
+        "S3Bucket",
+        BucketName=Join("-", [Ref(environment), Ref(s3bucketName)]),
+        NotificationConfiguration=NotificationConfiguration(
+            QueueConfigurations=[
+                QueueConfigurations(
+                    Queue=Join("", ["arn:aws:sqs:eu-west-1:060170161162:",
+                                    Join("-", [Ref(environment), Ref(queue)])]
+                               ),
+                    Event="s3:ObjectCreated:*"
+                )
+            ]
+        )
+    )
+)
 
 
 ExternalUploadRole = t.add_resource(User(
