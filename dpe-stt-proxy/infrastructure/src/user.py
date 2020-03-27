@@ -41,7 +41,10 @@ ExternalUploadRole = t.add_resource(User(
                 Statement(
                     Effect=Allow,
                     Action=[PutObject],
-                    Resource=[Join("", ["arn:aws:s3:::", Ref(s3bucketName)])]
+                    Resource=[
+                        Join("", ["arn:aws:s3:::", Ref(s3bucketName)]),
+                        Join("", ["arn:aws:s3:::", Ref(s3bucketName), "/*"]),
+                        ]
                 )
             ],
         )
