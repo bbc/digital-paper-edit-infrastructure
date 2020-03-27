@@ -4,7 +4,7 @@
     "Environment": "test",
     "UserName": "digital-paper-edit-uploader"
   },
-  "name_suffix": "bucket",
+  "name_suffix": "user",
   "aws_account_id": "060170161162",
   "region": "eu-west-1",
   "service_stack": false
