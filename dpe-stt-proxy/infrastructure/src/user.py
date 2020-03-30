@@ -31,29 +31,6 @@ environment = t.add_parameter(Parameter(
     Type="String"
 ))
 
-queue = t.add_parameter(Parameter(
-    "EventQueue",
-    Type="String"
-))
-
-S3bucket = t.add_resource(
-    Bucket(
-        "S3Bucket",
-        BucketName=Join("-", [Ref(environment), Ref(s3bucketName)]),
-        NotificationConfiguration=NotificationConfiguration(
-            QueueConfigurations=[
-                QueueConfigurations(
-                    Queue=Join("", ["arn:aws:sqs:eu-west-1:060170161162:",
-                                    Join("-", [Ref(environment), Ref(queue)])]
-                               ),
-                    Event="s3:ObjectCreated:*"
-                )
-            ]
-        )
-    )
-)
-
-
 ExternalUploadRole = t.add_resource(User(
     "UploadUser",
     UserName=Join("-", [Ref(environment), Ref(userName)]),
@@ -64,9 +41,13 @@ ExternalUploadRole = t.add_resource(User(
                 Statement(
                     Effect=Allow,
                     Action=[PutObject],
-                    Resource=[Join("/", [GetAtt(S3bucket, "Arn"), "*"])],
+                    Resource=[
+                        Join("", ["arn:aws:s3:::", Ref(s3bucketName)]),
+                        Join("", ["arn:aws:s3:::", Ref(s3bucketName), "/*"]),
+                        ]
                 )
-            ])
+            ],
+        )
     )]
 ))
 
