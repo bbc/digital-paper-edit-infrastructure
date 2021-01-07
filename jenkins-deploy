@@ -13,6 +13,9 @@ node_modules/.bin/cosmos-deploy update-config digital-paper-edit-$DIR $ENV 1.0.0
 
 if [ $DIR = "stt-proxy" ] ; then
     node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-$DIR $ENV 1.0.0 user 
+elif [ $DIR = "client" ] ; then	
+    node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-$DIR $ENV 1.0.0 dns;
+    node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-$DIR $ENV 1.0.0 main
 else
 	echo "No other stacks to provision"
 fi
