@@ -1,0 +1,23 @@
+[
+  {
+    "key": "access-proxy-accepted-groups",
+    "value": "ba5f595f-5905-495c-ac96-d87dd2515869"
+  },
+  {
+    "key": "access-proxy-healthcheck-path",
+    "value": "/status"
+  },
+  {
+    "key": "access-proxy-hostname",
+    "value": "digital-paper-edit.tools.bbc.co.uk"
+  },
+  {
+    "key": "access-proxy-oidc-bbc-login-client-id",
+    "value": ""
+  },
+  {
+    "key": "access-proxy-target",
+    "value": "http://localhost:3000"
+  },
+  { "key": "access-proxy-landing-page-path", "value": "/_ppap/login/bbclogin" }
+]

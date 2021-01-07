@@ -1,0 +1,12 @@
+[cloudwatch-agent-el7]
+name=amazon-cloudwatch-agent
+mirrorlist=https://repository.api.bbci.co.uk/cloudwatch-agent-el7/revisions/stable
+gpgcheck=1
+enabled=1
+gpgkey=file:///etc/pki/rpm-gpg/otg-build-tools-signing-keys.gpg
+repo_gpgcheck = False
+ssl_check_cert_permissions = True
+sslcacert =
+sslclientcert = /etc/pki/tls/certs/client.crt
+sslclientkey = /etc/pki/tls/private/client.key
+sslverify = True
