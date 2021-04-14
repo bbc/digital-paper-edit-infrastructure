@@ -35,7 +35,7 @@ mkdir -p %{buildroot}%{_prefix}/lib/systemd/system/
 mkdir -p %{buildroot}%{_sysconfdir}/bake-scripts
 mkdir -p %{buildroot}%{_sysconfdir}/%{name}
 
-# cp -r usr/lib/%{name}/* %{buildroot}%{_prefix}/lib/%{name}
+cp -r usr/lib/%{name}/build %{buildroot}%{_prefix}/lib/%{name}
 cp -r usr/lib/systemd/* %{buildroot}%{_prefix}/lib/systemd
 cp -r etc/* %{buildroot}%{_sysconfdir}
 
@@ -58,4 +58,4 @@ getent passwd %{name} >/dev/null || useradd -r -g %{name} -d / -s /sbin/nologin 
 
 %defattr(644, root, root, 755)
 %{_prefix}/lib/systemd/system/*
-%{_prefix}/lib/%{name}
+%{_prefix}/lib/%{name}/*
