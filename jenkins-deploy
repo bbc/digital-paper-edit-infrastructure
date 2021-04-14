@@ -20,4 +20,4 @@ else
 	echo "No other stacks to provision"
 fi
 
-make release
+ENV=$ENV make release deploy

@@ -15,7 +15,7 @@ dpe-prep:
 	cd src/usr/lib/$(NAME) && npm install 
 
 dpe-build:
-	aws --region eu-west-1 ssm get-parameters --name test-digital-paper-edit-env --with-decryption | jq '.Parameters[0].Value' > .env
+	aws --region eu-west-1 ssm get-parameters --name  $(ENV)-digital-paper-edit-env --with-decryption | jq '.Parameters[0].Value' > .env
 	npm run build
 
 dpe: dpe-prep dpe-build
@@ -39,8 +39,8 @@ release: clean dpe SOURCES SPECS/$(NAME).spec
 	# https://github.com/bbc/cosmos-release/ for more information
 	cosmos-release service $(NAME) RPMS/*.rpm
 
-deploy_test:
-	cosmos deploy $(NAME) test -f
-	cosmos deploy-progress $(NAME) test
+deploy:
+	cosmos deploy $(NAME) $(ENV) -f
+	cosmos deploy-progress $(NAME) $(ENV)
 
-.PHONY: test deploy_test release clean all dpe
+.PHONY: test deploy release clean all dpe dpe-prep dpe-build
