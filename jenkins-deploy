@@ -19,3 +19,5 @@ elif [ $DIR = "client" ] ; then
 else
 	echo "No other stacks to provision"
 fi
+
+make release
