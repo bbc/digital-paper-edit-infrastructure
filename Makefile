@@ -11,13 +11,13 @@ SOURCES: SOURCES/$(NAME).tar.gz
 
 dpe-prep: 
 	@ mkdir -p src/usr/lib/$(NAME)
-	git clone git@github.com:bbc/digital-paper-edit-firebase.git src/usr/lib/$(NAME)
+	@ git clone git@github.com:bbc/digital-paper-edit-firebase.git src/usr/lib/$(NAME)
 	cd src/usr/lib/$(NAME) && npm install 
 
 dpe-build:
 	cd src/usr/lib/$(NAME) && \
 	aws --region eu-west-1 ssm get-parameters --name $(ENV)-digital-paper-edit-env --with-decryption | jq '.Parameters[0].Value' > .env && \
-	npm run build
+	cat .env && npm run build && cd .. && mv -f $(NAME)/build $(NAME)
 
 dpe: dpe-prep dpe-build
 
