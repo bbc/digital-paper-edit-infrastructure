@@ -49,9 +49,31 @@ You can build the AWS Stacks in `infrastructure` by running `make all`. This
 will install Python dependencies in your `virtualenv` folder and generate the
 templates.
 
-If you only want to build the stacks, run `make stacks`. If you want to create
-the Cloudformation, you will need to do it manually
+If you only want to build the stacks, run `make stacks`.
+
+**Note**: There are 3 CFN files generated from the `make` steps.
+
+- dns
+- main
+- user
+
+DNS and Main are both deployed in the infrastructure job, and linked to
+[Cosmos project for the client](https://cosmos.tools.bbc.co.uk/services/digital-paper-edit-client)
+
+If you want to create the Cloudformation, you will need to do it manually
 [here](https://cosmos.tools.bbc.co.uk/services/digital-paper-edit-infrastructure).
+
+##### The User stack
+
+The `user` is a standalone Jenkins job in
+[Jenkins job](https://jenkins.newslabs.tools.bbc.co.uk/job/digital-paper-edit-stt-proxy/),
+related to
+[Cosmos project](https://cosmos.tools.bbc.co.uk/services/digital-paper-edit-stt-proxy).
+
+The separation is for historical reasons.
+
+The generated user is used by the client app (GCP) to access an S3 bucket,
+required to start the transcription process.
 
 ### Deployment
 
