@@ -57,7 +57,9 @@ If you only want to build the stacks, run `make stacks`.
 - main
 - user
 
-DNS and Main are both deployed in the infrastructure job, and linked to
+DNS and Main are both deployed in the
+[Jenkins job](https://jenkins.newslabs.tools.bbc.co.uk/job/digital-paper-edit-infrastructure/),
+and linked to
 [Cosmos project for the client](https://cosmos.tools.bbc.co.uk/services/digital-paper-edit-client)
 
 If you want to create the Cloudformation, you will need to do it manually
