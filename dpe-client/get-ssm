@@ -1,2 +1,0 @@
-#!/bin/sh
-aws --region eu-west-1 ssm get-parameters --name test-digital-paper-edit-env --with-decryption | jq '.Parameters[0].Value' > src/usr/lib/digital-paper-edit-client/.env

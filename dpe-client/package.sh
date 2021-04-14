@@ -1,1 +1,0 @@
-aws ssm get-parameters --name test-digital-paper-edit
