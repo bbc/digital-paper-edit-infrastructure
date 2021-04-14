@@ -1,23 +1,13 @@
 #!/bin/sh
 set -eu
 
-DIR=$1
-ENV=$2
-
-cd dpe-$DIR
+ENV=$1
 
 npm install bbc/cosmos-deploy#v3
 
-node_modules/.bin/cosmos-deploy update-repositories digital-paper-edit-$DIR $ENV 1.0.0
-node_modules/.bin/cosmos-deploy update-config digital-paper-edit-$DIR $ENV 1.0.0 || echo "No config files"
-
-if [ $DIR = "stt-proxy" ] ; then
-    node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-$DIR $ENV 1.0.0 user 
-elif [ $DIR = "client" ] ; then	
-    node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-$DIR $ENV 1.0.0 dns;
-    node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-$DIR $ENV 1.0.0 main
-else
-	echo "No other stacks to provision"
-fi
+node_modules/.bin/cosmos-deploy update-repositories digital-paper-edit-client $ENV 1.0.0
+node_modules/.bin/cosmos-deploy update-config digital-paper-edit-client $ENV 1.0.0 || echo "No config files"
+node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-client $ENV 1.0.0 dns;
+node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-client $ENV 1.0.0 main
 
 ENV=$ENV make release deploy

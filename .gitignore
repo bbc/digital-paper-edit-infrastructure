@@ -11,4 +11,4 @@ node_modules
 
 .DS_Store
 
-dpe-client/src/usr/lib/digital-paper-edit-client
+src/usr/lib/digital-paper-edit-client
