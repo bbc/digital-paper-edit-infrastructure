@@ -1,9 +1,21 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
     "Description": "Digital Paper Edit Infrastructure",
+    "Outputs": {
+        "KeyId": {
+            "Description": "KeyId of KMS",
+            "Value": {
+                "Ref": "KmsKey"
+            }
+        }
+    },
     "Parameters": {
         "CnameEntry": {
             "Description": "The CNAME DNS entry for the component",
+            "Type": "String"
+        },
+        "ComponentName": {
+            "Description": "Your component name",
             "Type": "String"
         },
         "CoreInfrastructureStackName": {
@@ -116,7 +128,7 @@
                     {
                         "Key": "BBCComponent",
                         "PropagateAtLaunch": true,
-                        "Value": "digital-paper-edit-infrastructure"
+                        "Value": "digital-paper-edit"
                     },
                     {
                         "Key": "BBCEnvironment",
@@ -135,7 +147,7 @@
                                     {
                                         "Ref": "Environment"
                                     },
-                                    "digital-paper-edit-infrastructure"
+                                    "digital-paper-edit"
                                 ]
                             ]
                         }
@@ -317,7 +329,7 @@
                                 },
                                 {
                                     "Key": "BBCComponent",
-                                    "Value": "digital-paper-edit-infrastructure"
+                                    "Value": "digital-paper-edit"
                                 },
                                 {
                                     "Key": "BBCEnvironment",
@@ -364,6 +376,29 @@
                             "Effect": "Allow",
                             "Resource": [
                                 "*"
+                            ]
+                        },
+                        {
+                            "Action": [
+                                "kms:Create*",
+                                "kms:Describe*",
+                                "kms:Enable*",
+                                "kms:List*",
+                                "kms:Put*",
+                                "kms:Update*",
+                                "kms:Revoke*",
+                                "kms:Disable*",
+                                "kms:Get*",
+                                "kms:Delete*",
+                                "kms:TagResource*",
+                                "kms:UntagResource*",
+                                "kms:ScheduleKeyDeletion*",
+                                "kms:CancelKeyDeletion*"
+                            ],
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:kms:*:060170161162:key/*",
+                                "arn:aws:kms:*:060170161162:alias/*"
                             ]
                         }
                     ]
@@ -426,6 +461,135 @@
                 }
             },
             "Type": "AWS::EC2::SecurityGroup"
+        },
+        "KeyAlias": {
+            "DependsOn": "KmsKey",
+            "Properties": {
+                "AliasName": {
+                    "Fn::Join": [
+                        "",
+                        [
+                            "alias/",
+                            {
+                                "Fn::Join": [
+                                    "-",
+                                    [
+                                        {
+                                            "Ref": "Environment"
+                                        },
+                                        {
+                                            "Ref": "ComponentName"
+                                        }
+                                    ]
+                                ]
+                            }
+                        ]
+                    ]
+                },
+                "TargetKeyId": {
+                    "Ref": "KmsKey"
+                }
+            },
+            "Type": "AWS::KMS::Alias"
+        },
+        "KmsKey": {
+            "Properties": {
+                "Description": "Key for encrypting the secrets",
+                "KeyPolicy": {
+                    "Statement": [
+                        {
+                            "Action": [
+                                "kms:*"
+                            ],
+                            "Effect": "Allow",
+                            "Principal": {
+                                "AWS": "arn:aws:iam::060170161162:root"
+                            },
+                            "Resource": [
+                                "*"
+                            ],
+                            "Sid": "Enable IAM User Permissions"
+                        },
+                        {
+                            "Action": [
+                                "kms:Create*",
+                                "kms:Describe*",
+                                "kms:Enable*",
+                                "kms:List*",
+                                "kms:Put*",
+                                "kms:Update*",
+                                "kms:Revoke*",
+                                "kms:Disable*",
+                                "kms:Get*",
+                                "kms:Delete*",
+                                "kms:TagResource*",
+                                "kms:UntagResource*",
+                                "kms:ScheduleKeyDeletion*",
+                                "kms:CancelKeyDeletion*"
+                            ],
+                            "Effect": "Allow",
+                            "Principal": {
+                                "AWS": [
+                                    "arn:aws:iam::060170161162:role/eimi.okuno@bbc.co.uk",
+                                    "arn:aws:iam::060170161162:role/tamsin.green@bbc.co.uk",
+                                    "arn:aws:iam::060170161162:role/lei.he01@bbc.co.uk"
+                                ]
+                            },
+                            "Resource": [
+                                "*"
+                            ],
+                            "Sid": "Allow access for Key Administrators"
+                        },
+                        {
+                            "Action": [
+                                "kms:Encrypt*",
+                                "kms:Decrypt*",
+                                "kms:ReEncrypt*",
+                                "kms:GenerateDataKey*",
+                                "kms:DescribeKey"
+                            ],
+                            "Effect": "Allow",
+                            "Principal": {
+                                "AWS": [
+                                    "arn:aws:iam::060170161162:role/anna.blaziak@bbc.co.uk",
+                                    "arn:aws:iam::060170161162:role/allison.shultes@bbc.co.uk",
+                                    "arn:aws:iam::060170161162:role/sarah.rainbow@bbc.co.uk"
+                                ]
+                            },
+                            "Resource": [
+                                "*"
+                            ],
+                            "Sid": "Allow use of the key"
+                        },
+                        {
+                            "Action": [
+                                "kms:CreateGrant",
+                                "kms:ListGrants",
+                                "kms:RevokeGrant"
+                            ],
+                            "Condition": {
+                                "Bool": {
+                                    "kms:GrantIsForAWSResource": true
+                                }
+                            },
+                            "Effect": "Allow",
+                            "Principal": {
+                                "AWS": [
+                                    "arn:aws:iam::060170161162:role/anna.blaziak@bbc.co.uk",
+                                    "arn:aws:iam::060170161162:role/allison.shultes@bbc.co.uk",
+                                    "arn:aws:iam::060170161162:role/sarah.rainbow@bbc.co.uk"
+                                ]
+                            },
+                            "Resource": [
+                                "*"
+                            ],
+                            "Sid": "Allow attachment of persistent resources"
+                        }
+                    ],
+                    "Version": "2012-10-17"
+                }
+            },
+            "Type": "AWS::KMS::Key"
         },
         "LoadBalancerSecurityGroup": {
             "Properties": {

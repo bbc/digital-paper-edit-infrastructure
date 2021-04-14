@@ -1,0 +1,13 @@
+[Unit]
+Description=digital-paper-edit-client
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/npm run start
+Type=simple
+Restart=on-failure
+RestartSec=15s
+WorkingDirectory=/usr/lib/digital-paper-edit-client
+
+[Install]
+WantedBy=multi-user.target

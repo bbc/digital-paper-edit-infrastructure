@@ -1,6 +1,6 @@
 .PHONY: all clean cleanvenv venv stacks	
 
- SOURCES := $(shell echo src/*.py)	
+SOURCES := $(shell echo src/*.py)	
 TARGETS := $(patsubst src/%.py,stacks/templates/%.json,$(SOURCES))	
 
  all: clean venv $(TARGETS)	

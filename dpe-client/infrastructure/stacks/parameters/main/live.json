@@ -2,6 +2,7 @@
   "parameters": {
     "InstanceType": "t2.micro",
     "CnameEntry": "digital-paper-edit",
+    "ComponentName": "digital-paper-edit",
     "DomainNameBase": "ee74d3541ebec4a3.xhst.bbci.co.uk.",
     "Environment": "live",
     "MinSize": "1",
