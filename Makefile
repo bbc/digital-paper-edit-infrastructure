@@ -11,7 +11,7 @@ SOURCES: SOURCES/$(NAME).tar.gz
 
 dpe-prep: 
 	@ mkdir -p src/usr/lib/$(NAME)
-	@ git clone git@github.com:bbc/digital-paper-edit-firebase.git src/usr/lib/$(NAME)
+	@ git clone --single-branch --branch server git@github.com:bbc/digital-paper-edit-firebase.git src/usr/lib/$(NAME)
 	cd src/usr/lib/$(NAME) && npm install 
 
 dpe-build:
