@@ -31,6 +31,7 @@ ${name}
 
 %install
 rm -rf %{buildroot}
+mkdir -p %{buildroot}%{_prefix}/lib/%{name}
 mkdir -p %{buildroot}%{_prefix}/lib/systemd/system/
 mkdir -p %{buildroot}%{_sysconfdir}/bake-scripts
 mkdir -p %{buildroot}%{_sysconfdir}/%{name}
