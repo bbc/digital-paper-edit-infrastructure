@@ -1,12 +1,12 @@
 {
   "parameters": {
-    "InstanceType": "t2.micro",
+    "InstanceType": "t3.micro",
     "CnameEntry": "digital-paper-edit.test",
     "ComponentName": "digital-paper-edit",
     "DomainNameBase": "ee74d3541ebec4a3.xhst.bbci.co.uk.",
     "Environment": "test",
     "MinSize": "1",
-    "MaxSize": "4",
+    "MaxSize": "1",
     "DesiredCapacity": "1",
     "UpdatePauseTime": "PT0S",
     "UpdateMinInService": "0",
