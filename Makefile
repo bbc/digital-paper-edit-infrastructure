@@ -1,4 +1,5 @@
 NAME:=digital-paper-edit-client
+VERSION_NUMBER:=$(shell cosmos-release generate-version $(NAME))
 
 all: RPMS
 
@@ -35,13 +36,13 @@ release: clean dpe SOURCES SPECS/$(NAME).spec
 	# https://github.com/bbc/bbc-mock-tools for more information.  Also
 	# adds an extra part to the version string containing an
 	# auto-incrementing build number.
-	mock-build --os 7 --define "buildnum $(shell cosmos-release generate-version $(NAME))"
+	mock-build --os 7 --define "buildnum $(VERSION_NUMBER)"
 	# Send the RPM and other release metadata to Cosmos.  See
 	# https://github.com/bbc/cosmos-release/ for more information
 	cosmos-release service $(NAME) RPMS/*.rpm
 
 deploy:
-	cosmos deploy $(NAME) $(ENV) -f
-	cosmos deploy-progress $(NAME) $(ENV)
+	cosmos deploy $(NAME) $(ENV) $(VERSION_NUMBER) -f
+	cosmos deploy-progress $(NAME) $(ENV) $(VERSION_NUMBER)
 
 .PHONY: test deploy release clean all dpe dpe-prep dpe-build
