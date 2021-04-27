@@ -66,7 +66,6 @@ key_policy = Policy(
             Principal=Principal(
                 "AWS",
                 [
-                    "arn:aws:iam::060170161162:role/eimi.okuno@bbc.co.uk",
                     "arn:aws:iam::060170161162:role/tamsin.green@bbc.co.uk",
                     "arn:aws:iam::060170161162:role/lei.he01@bbc.co.uk",
                 ],
@@ -155,9 +154,7 @@ kms_alias = t.add_resource(
             "",
             [
                 "alias/",
-                Join(
-                    "-",
-                    [Ref(t.parameters["Environment"]), Ref(component_name)],
+                Ref(component_name),
                 ),
             ],
         ),

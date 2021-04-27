@@ -7,7 +7,7 @@ Edit.
 | Environment | URL                                               |
 | :---------- | :------------------------------------------------ |
 | Test        | <https://digital-paper-edit.test.tools.bbc.co.uk> |
-| Live        | <https://digital-paper-edit.live.tools.bbc.co.uk> |
+| Live        | <https://digital-paper-edit.tools.bbc.co.uk> |
 
 For historical undestanding of this repo, read
 [ADR 2019-04-23-transcript-architecture.md](https://github.com/bbc/digital-paper-edit-client/blob/master/docs/ADR/2019-04-23-transcript-architecture.md)
@@ -81,8 +81,7 @@ required to start the transcription process.
 
 For BBC deployment we use
 [Jenkins job](https://jenkins.newslabs.tools.bbc.co.uk/job/digital-paper-edit-infrastructure/).
-This will use the [Jenkins Deploy script](./jenkins-deploy) to update CFNs,
-build and release the RPM to the corresponding environment.
+This will use the [Jenkins Deploy script](./jenkins-deploy) to release the RPM to the test environment. Live deployments should be done by promoting the release on Cosmos. 
 
 ### Configuration files
 
@@ -96,13 +95,13 @@ pull in environment specific file and corresponding decrypt keys.
 
 The parameters in SSM should be named:
 
-- test-digital-paper-edit-env
-- live-digital-paper-edit-env
+- digital-paper-edit-env
 
-The keys in KMS should have aliases:
+The keys in KMS should have an alias:
 
-- alias/test-digital-paper-edit
-- alias/live-digital-paper-edit
+- alias/digital-paper-edit
+
+Both test and live environment variables will be stored here. 
 
 Jenkin's IAM Policy has been updated as part of
 [issue 15](https://github.com/bbc/newslabs-jenkins/pull/15) and
