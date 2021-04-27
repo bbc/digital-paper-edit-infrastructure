@@ -155,7 +155,6 @@ kms_alias = t.add_resource(
             [
                 "alias/",
                 Ref(component_name),
-                ),
             ],
         ),
         TargetKeyId=Ref(kms_key),

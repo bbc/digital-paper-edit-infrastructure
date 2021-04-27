@@ -3,9 +3,9 @@ set -eu
 
 npm install bbc/cosmos-deploy#v3
 
-node_modules/.bin/cosmos-deploy update-repositories digital-paper-edit-client test 1.0.0
-node_modules/.bin/cosmos-deploy update-config digital-paper-edit-client test 1.0.0 || echo "No config files"
-node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-client test 1.0.0 dns;
-node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-client test 1.0.0 main
+# node_modules/.bin/cosmos-deploy update-repositories digital-paper-edit-client test 1.0.0
+# node_modules/.bin/cosmos-deploy update-config digital-paper-edit-client test 1.0.0 || echo "No config files"
+# node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-client test 1.0.0 dns;
+# node_modules/.bin/cosmos-deploy provision-stack digital-paper-edit-client test 1.0.0 main
 
 ENV=test make release deploy

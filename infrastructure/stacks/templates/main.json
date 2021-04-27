@@ -471,17 +471,7 @@
                         [
                             "alias/",
                             {
-                                "Fn::Join": [
-                                    "-",
-                                    [
-                                        {
-                                            "Ref": "Environment"
-                                        },
-                                        {
-                                            "Ref": "ComponentName"
-                                        }
-                                    ]
-                                ]
+                                "Ref": "ComponentName"
                             }
                         ]
                     ]
@@ -530,7 +520,6 @@
                             "Effect": "Allow",
                             "Principal": {
                                 "AWS": [
-                                    "arn:aws:iam::060170161162:role/eimi.okuno@bbc.co.uk",
                                     "arn:aws:iam::060170161162:role/tamsin.green@bbc.co.uk",
                                     "arn:aws:iam::060170161162:role/lei.he01@bbc.co.uk"
                                 ]
