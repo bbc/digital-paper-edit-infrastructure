@@ -16,7 +16,7 @@ dpe-prep:
 
 dpe-build:
 	cd src/usr/lib/$(NAME) && \
-	aws --region eu-west-1 ssm get-parameters --name digital-paper-edit-env --with-decryption | jq -r '.Parameters[0].Value' > .env && \
+	aws --region eu-west-1 ssm get-parameters --name $(ENV)-digital-paper-edit-env --with-decryption | jq -r '.Parameters[0].Value' > .env && \
 	cat .env && npm run build && cd .. && mv $(NAME)/build build && rm -rf $(NAME) && mv build $(NAME)
 
 dpe: dpe-prep dpe-build

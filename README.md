@@ -95,13 +95,15 @@ pull in environment specific file and corresponding decrypt keys.
 
 The parameters in SSM should be named:
 
-- digital-paper-edit-env
+- test-digital-paper-edit-env
+- live-digital-paper-edit-env
 
-The keys in KMS should have an alias:
+The keys in KMS should have aliases:
 
-- alias/digital-paper-edit
+- alias/test-digital-paper-edit
+- alias/live-digital-paper-edit
 
-Both test and live environment variables will be stored here. 
+Test and live environments should be identical.
 
 Jenkin's IAM Policy has been updated as part of
 [issue 15](https://github.com/bbc/newslabs-jenkins/pull/15) and

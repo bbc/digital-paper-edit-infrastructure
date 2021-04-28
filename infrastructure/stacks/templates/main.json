@@ -471,7 +471,17 @@
                         [
                             "alias/",
                             {
-                                "Ref": "ComponentName"
+                                "Fn::Join": [
+                                    "-",
+                                    [
+                                        {
+                                            "Ref": "Environment"
+                                        },
+                                        {
+                                            "Ref": "ComponentName"
+                                        }
+                                    ]
+                                ]
                             }
                         ]
                     ]
@@ -521,7 +531,8 @@
                             "Principal": {
                                 "AWS": [
                                     "arn:aws:iam::060170161162:role/tamsin.green@bbc.co.uk",
-                                    "arn:aws:iam::060170161162:role/lei.he01@bbc.co.uk"
+                                    "arn:aws:iam::060170161162:role/lei.he01@bbc.co.uk",
+                                    "arn:aws:iam::060170161162:role/allison.shultes@bbc.co.uk"
                                 ]
                             },
                             "Resource": [

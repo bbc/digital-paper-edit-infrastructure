@@ -68,6 +68,7 @@ key_policy = Policy(
                 [
                     "arn:aws:iam::060170161162:role/tamsin.green@bbc.co.uk",
                     "arn:aws:iam::060170161162:role/lei.he01@bbc.co.uk",
+                    "arn:aws:iam::060170161162:role/allison.shultes@bbc.co.uk",
                 ],
             ),
             Action=[
@@ -154,7 +155,10 @@ kms_alias = t.add_resource(
             "",
             [
                 "alias/",
-                Ref(component_name),
+                Join(
+                    "-",
+                    [Ref(t.parameters["Environment"]), Ref(component_name)],
+                ),
             ],
         ),
         TargetKeyId=Ref(kms_key),
