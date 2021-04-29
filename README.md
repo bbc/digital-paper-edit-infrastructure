@@ -1,79 +1,113 @@
 # Digital Paper Edit - Infrastructure
 
-This is purely the infrastructural part to tie together the [API](https://github.com/bbc/digital-paper-edit-api/) and the [client](https://github.com/bbc/digital-paper-edit-client/) of Digital Paper Edit.
+This is purely the infrastructural part to tie together with
+[firebase](https://github.com/bbc/digital-paper-edit-firebase/) of Digital Paper
+Edit.
 
-[See here for overall project architecture info](https://github.com/bbc/digital-paper-edit-client#project-architecture)
+| Environment | URL                                               |
+| :---------- | :------------------------------------------------ |
+| Test        | <https://digital-paper-edit.test.tools.bbc.co.uk> |
+| Live        | <https://digital-paper-edit.tools.bbc.co.uk> |
 
-<!-- [Link to API]() -->
-
-| Environment | URL                                             |
-| :---------- | :---------------------------------------------- |
-| Mock        | Local dev - TBC                                 |
-| Int         | https://digital-paper-edit.int.tools.bbc.co.uk  |
-| Test        | https://digital-paper-edit.test.tools.bbc.co.uk |
-| Live        | https://digital-paper-edit.live.tools.bbc.co.uk |
-
-[See @bbc/digital-paper-edit-client/docs/ADR/2019-04-23-transcript-architecture.md ](https://github.com/bbc/digital-paper-edit-client/blob/master/docs/ADR/2019-04-23-transcript-architecture.md) for more info on the architecure and diagram.
+For historical undestanding of this repo, read
+[ADR 2019-04-23-transcript-architecture.md](https://github.com/bbc/digital-paper-edit-client/blob/master/docs/ADR/2019-04-23-transcript-architecture.md)
+for more information.
 
 ## System Architecture
 
 ## Usage
 
-- `infrastructure` contains AWS specific configurations.
-- `SPEC` contains instructions to build an RPM.
-- `dpe-api` contains [API](https://github.com/bbc/digital-paper-edit-api/) specific code. (WIP)
-- `dpe-client` contains [Client](https://github.com/bbc/digital-paper-edit-client/) specific code. (WIP)
+- `infrastructure` contains deployment configurations.
+- `SPEC` contains instructions to build an RPM. specific code. (WIP)
 
-The `Makefile` has instructions that will allow you to build your RPMS and release them.
-There are 3 `Makefile`s in this repository:
+The `Makefile` has instructions that will allow you to build your RPMS and
+release them. `Makefile`, you can build the RPM that pulls in the NPM modules,
+that contain the logic.
 
-1. Root level
-2. `dpe-api`
-3. `dpe-client`
-
-The root level `Makefile` will allow you to package an RPM that will pull in `dpe-client` and `dpe-api` that is released into a `yum` repository in Cosmos. There is nothing else in there. This will be deployed to Cosmos via Jenkins to install and automatically start the services. It is still a WIP, and will not work as is - there still needs to be work done for accessing the `Cosmos yum` repo.
-
-At the `dpe-api` and `dpe-client` `Makefile`, you can build the RPM that pulls in the NPM modules, that contain the logic.
-
-These `Makefile` instructions will only work on BBC CentOS based machines, as it requires certain BBC specific dependencies.
+These `Makefile` instructions will only work on BBC CentOS based machines, as it
+requires certain BBC specific dependencies.
 
 ## Development
 
+Development for components should be done in the
+[Client](https://github.com/bbc/digital-paper-edit-firebase/).
+
 ### Dependencies
 
-Both `dpe-api` and `dpe-client` services pull in a dependency from the BBC NPM.
-
-#### dpe-api
-
-- [API](https://github.com/bbc/digital-paper-edit-api/)
-
-The API Express is directly used without assignment.
-
-#### dpe-client
-
-- [Client](https://github.com/bbc/digital-paper-edit-client/)
-
-### Running
-
-#### Locally
-
-In both `dpe-api` and `dpe-client` run:
-
-```
-npm start
-```
-
-This will start the client at [http://localhost:8080](http://localhost:8080) and the api at [http://localhost:5000](http://localhost:5000).
+See [Client](https://github.com/bbc/digital-paper-edit-firebase/).
 
 ### Build
 
+The RPM build is specific per environment. What this means is that environment
+specific configuration is pulled in at build-time. It's retrieved via the SSM
+(AWS's System Service Manager) and bundled in with `npm run build`. See
+[Configuration section](#configuration-files) for more details.
+
 #### Cloudformation
 
-You can build the AWS Stacks in `infrastructure` by running `make all`. This will install Python dependencies in your `virtualenv` folder and generate the templates.
+You can build the AWS Stacks in `infrastructure` by running `make all`. This
+will install Python dependencies in your `virtualenv` folder and generate the
+templates.
+
+If you only want to build the stacks, run `make stacks`.
+
+**Note**: There are 3 CFN files generated from the `make` steps.
+
+- dns
+- main
+- user
+
+DNS and Main are both deployed in the
+[Jenkins job](https://jenkins.newslabs.tools.bbc.co.uk/job/digital-paper-edit-infrastructure/),
+and linked to
+[Cosmos project for the client](https://cosmos.tools.bbc.co.uk/services/digital-paper-edit-client)
+
+If you want to create the Cloudformation, you will need to do it manually
+[here](https://cosmos.tools.bbc.co.uk/services/digital-paper-edit-infrastructure).
+
+##### The User stack
+
+The `user` is a standalone Jenkins job in
+[Jenkins job](https://jenkins.newslabs.tools.bbc.co.uk/job/digital-paper-edit-stt-proxy/),
+related to
+[Cosmos project](https://cosmos.tools.bbc.co.uk/services/digital-paper-edit-stt-proxy).
+
+The separation is for historical reasons.
+
+The generated user is used by the client app (GCP) to access an S3 bucket,
+required to start the transcription process.
 
 ### Deployment
 
-For BBC deployment the [Jenkins job](https://jenkins.newslabs.tools.bbc.co.uk/job/digital-paper-edit/) is still WIP, and will not work as is. If you want to update Cloudformation, you will need to do it manually [here](https://cosmos.tools.bbc.co.uk/services/digital-paper-edit-infrastructure).
+For BBC deployment we use
+[Jenkins job](https://jenkins.newslabs.tools.bbc.co.uk/job/digital-paper-edit-infrastructure/).
+This will use the [Jenkins Deploy script](./jenkins-deploy) to release the RPM to the test environment. Live deployments should be done by promoting the release on Cosmos. 
+
+### Configuration files
+
+The [Client](https://github.com/bbc/digital-paper-edit-firebase/) needs a
+working `.env` to be able to run.
+
+The `.env` file is pulled in during the `make dpe-prep` step. This step will
+work on EC2 instances with attached instance profiles, that have permissions to
+access the specified parameters and keys. With working instances, it's able to
+pull in environment specific file and corresponding decrypt keys.
+
+The parameters in SSM should be named:
+
+- test-digital-paper-edit-env
+- live-digital-paper-edit-env
+
+The keys in KMS should have aliases:
+
+- alias/test-digital-paper-edit
+- alias/live-digital-paper-edit
+
+Test and live environments should be identical.
+
+Jenkin's IAM Policy has been updated as part of
+[issue 15](https://github.com/bbc/newslabs-jenkins/pull/15) and
+[issue 16](https://github.com/bbc/newslabs-jenkins/pull/16) in Jenkins.
 
 ## Licence
 
@@ -83,4 +117,5 @@ See [LICENCE](./LICENCE.md)
 
 ## Legal Disclaimer
 
-_Despite using React and DraftJs, the BBC is not promoting any Facebook products or other commercial interest._
+_Despite using React and DraftJs, the BBC is not promoting any Facebook products
+or other commercial interest._

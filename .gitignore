@@ -3,8 +3,6 @@ venv
 .vscode
 
 SOURCES
-SPECS
-*.service
 
 RPMS
 SRPMS
@@ -12,3 +10,5 @@ SRPMS
 node_modules
 
 .DS_Store
+
+src/usr/lib/digital-paper-edit-client
