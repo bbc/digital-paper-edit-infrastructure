@@ -18,7 +18,8 @@ t = CosmosTemplate(
 
 
 component_name = t.add_parameter(
-    Parameter("ComponentName", Type="String", Description="Your component name")
+    Parameter("ComponentName", Type="String",
+              Description="Your component name")
 )
 
 
@@ -69,6 +70,9 @@ key_policy = Policy(
                     "arn:aws:iam::060170161162:role/tamsin.green@bbc.co.uk",
                     "arn:aws:iam::060170161162:role/lei.he01@bbc.co.uk",
                     "arn:aws:iam::060170161162:role/allison.shultes@bbc.co.uk",
+                    "arn:aws:iam::060170161162:role/anna.blaziak@bbc.co.uk",
+                    "arn:aws:iam::060170161162:role/sarah.rainbow@bbc.co.uk",
+                    "arn:aws:iam::060170161162:role/nik.rahmel@bbc.co.uk"
                 ],
             ),
             Action=[
@@ -88,46 +92,7 @@ key_policy = Policy(
                 Action("kms", "CancelKeyDeletion*"),
             ],
             Resource=["*"],
-        ),
-        Statement(
-            Sid="Allow use of the key",
-            Effect=Allow,
-            Principal=Principal(
-                "AWS",
-                [
-                    "arn:aws:iam::060170161162:role/anna.blaziak@bbc.co.uk",
-                    "arn:aws:iam::060170161162:role/allison.shultes@bbc.co.uk",
-                    "arn:aws:iam::060170161162:role/sarah.rainbow@bbc.co.uk",
-                ],
-            ),
-            Action=[
-                Action("kms", "Encrypt*"),
-                Action("kms", "Decrypt*"),
-                Action("kms", "ReEncrypt*"),
-                Action("kms", "GenerateDataKey*"),
-                Action("kms", "DescribeKey"),
-            ],
-            Resource=["*"],
-        ),
-        Statement(
-            Sid="Allow attachment of persistent resources",
-            Effect=Allow,
-            Principal=Principal(
-                "AWS",
-                [
-                    "arn:aws:iam::060170161162:role/anna.blaziak@bbc.co.uk",
-                    "arn:aws:iam::060170161162:role/allison.shultes@bbc.co.uk",
-                    "arn:aws:iam::060170161162:role/sarah.rainbow@bbc.co.uk",
-                ],
-            ),
-            Action=[
-                Action("kms", "CreateGrant"),
-                Action("kms", "ListGrants"),
-                Action("kms", "RevokeGrant"),
-            ],
-            Resource=["*"],
-            Condition=Condition(Bool({"kms:GrantIsForAWSResource": True})),
-        ),
+        )
     ],
 )
 
